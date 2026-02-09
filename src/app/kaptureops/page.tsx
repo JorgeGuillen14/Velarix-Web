@@ -69,6 +69,7 @@ function ShaderBackground() {
 // ─── GSAP ANIMATIONS ────────────────────────────────────────
 function useKaptureAnimations() {
   useEffect(() => {
+    document.documentElement.style.scrollBehavior = "smooth"
     const mm = gsap.matchMedia()
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -113,95 +114,25 @@ function useKaptureAnimations() {
     })
 
     return () => {
+      document.documentElement.style.scrollBehavior = ""
       mm.revert()
       ScrollTrigger.getAll().forEach((t) => t.kill())
     }
   }, [])
 }
 
-// ─── KAPTUREOPS CAPABILITIES DATA (bold, saturated colors — no pastels) ───
+// ─── KAPTUREOPS CAPABILITIES: 9 completely different hues (no same color family) ───
+// Red, Orange, Yellow, Green, Cyan, Blue, Purple, Magenta, Pink
 const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
-  {
-    id: 1,
-    title: "Opportunity Discovery",
-    icon: Search,
-    content: "AI monitors federal marketplaces and scores every opportunity against your company profile. Know what to pursue and what to pass — before your competitors even see the listing.",
-    category: "Discovery",
-    relatedIds: [2, 3],
-    color: "#00d4ff", // bright cyan
-  },
-  {
-    id: 2,
-    title: "Proposal Generation",
-    icon: FileText,
-    content: "Generate compliant proposal drafts in minutes, not weeks. The platform pulls from your data to build Technical, Management, and Staffing volumes grounded in real performance history.",
-    category: "Proposals",
-    relatedIds: [1, 3, 8],
-    color: "#8b5cf6", // violet
-  },
-  {
-    id: 3,
-    title: "Intelligent Teaming",
-    icon: Users,
-    content: "AI-powered partner matching and gap analysis. Build the strongest possible team for every pursuit by surfacing the right partners, subcontractors, and joint venture candidates.",
-    category: "Teaming",
-    relatedIds: [1, 2, 8],
-    color: "#00e676", // electric green
-  },
-  {
-    id: 4,
-    title: "Compliance Engine",
-    icon: Shield,
-    content: "Continuous monitoring across every certification, clearance, and regulatory requirement your organization needs. Alerts before anything expires. Compliance as a steady state, not a scramble.",
-    category: "Compliance",
-    relatedIds: [5, 7],
-    color: "#ffab00", // bold amber
-  },
-  {
-    id: 5,
-    title: "Financial Management",
-    icon: DollarSign,
-    content: "Indirect rate calculations, cost pool management, and audit-ready documentation — all automated. Replace the spreadsheets your finance team dreads every month.",
-    category: "Finance",
-    relatedIds: [4, 6],
-    color: "#ff1744", // bold red
-  },
-  {
-    id: 6,
-    title: "Automated AP",
-    icon: Receipt,
-    content: "AI-powered invoice processing that reads, matches, and verifies every line item against your contracts. Eliminate manual entry errors and accelerate payment cycles.",
-    category: "Accounts Payable",
-    relatedIds: [5, 7],
-    color: "#f50057", // bold pink
-  },
-  {
-    id: 7,
-    title: "Contract Management",
-    icon: Layers,
-    content: "Full lifecycle oversight from award to closeout. Track spend against ceilings, manage deliverables, and surface analytics that sharpen your strategy for the next pursuit.",
-    category: "Contracts",
-    relatedIds: [4, 6, 9],
-    color: "#2979ff", // bold blue
-  },
-  {
-    id: 8,
-    title: "Resume Intake",
-    icon: UserCheck,
-    content: "Upload your entire company roster. The platform parses every resume and matches personnel to opportunities based on past performance, clearances, certifications, and role fit — so you always put your best people forward.",
-    category: "Personnel",
-    relatedIds: [2, 3],
-    color: "#00e5a0", // bold teal
-  },
-  {
-    id: 9,
-    title: "Pipeline Analytics",
-    icon: BarChart3,
-    content: "Real-time visibility into your entire capture pipeline. Win/loss trends, pursuit velocity, and forecasting — everything leadership needs to make strategic decisions about where to invest next.",
-    category: "Analytics",
-    relatedIds: [1, 7],
-    color: "#b388ff", // bold purple
-  },
+  { id: 1, title: "Opportunity Discovery", icon: Search, content: "AI monitors federal marketplaces and scores every opportunity against your company profile. Know what to pursue and what to pass — before your competitors even see the listing.", category: "Discovery", relatedIds: [2, 3], color: "#06b6d4" },   // cyan
+  { id: 2, title: "Proposal Generation", icon: FileText, content: "Generate compliant proposal drafts in minutes, not weeks. The platform pulls from your data to build Technical, Management, and Staffing volumes grounded in real performance history.", category: "Proposals", relatedIds: [1, 3, 8], color: "#7c3aed" },   // purple
+  { id: 3, title: "Intelligent Teaming", icon: Users, content: "AI-powered partner matching and gap analysis. Build the strongest possible team for every pursuit by surfacing the right partners, subcontractors, and joint venture candidates.", category: "Teaming", relatedIds: [1, 2, 8], color: "#22c55e" },   // green
+  { id: 4, title: "Compliance Engine", icon: Shield, content: "Continuous monitoring across every certification, clearance, and regulatory requirement your organization needs. Alerts before anything expires. Compliance as a steady state, not a scramble.", category: "Compliance", relatedIds: [5, 7], color: "#eab308" },   // yellow
+  { id: 5, title: "Financial Management", icon: DollarSign, content: "Indirect rate calculations, cost pool management, and audit-ready documentation — all automated. Replace the spreadsheets your finance team dreads every month.", category: "Finance", relatedIds: [4, 6], color: "#ef4444" },   // red
+  { id: 6, title: "Automated AP", icon: Receipt, content: "AI-powered invoice processing that reads, matches, and verifies every line item against your contracts. Eliminate manual entry errors and accelerate payment cycles.", category: "Accounts Payable", relatedIds: [5, 7], color: "#db2777" },   // pink
+  { id: 7, title: "Contract Management", icon: Layers, content: "Full lifecycle oversight from award to closeout. Track spend against ceilings, manage deliverables, and surface analytics that sharpen your strategy for the next pursuit.", category: "Contracts", relatedIds: [4, 6, 9], color: "#2563eb" },   // blue
+  { id: 8, title: "Resume Intake", icon: UserCheck, content: "Upload your entire company roster. The platform parses every resume and matches personnel to opportunities based on past performance, clearances, certifications, and role fit — so you always put your best people forward.", category: "Personnel", relatedIds: [2, 3], color: "#f97316" },   // orange
+  { id: 9, title: "Pipeline Analytics", icon: BarChart3, content: "Real-time visibility into your entire capture pipeline. Win/loss trends, pursuit velocity, and forecasting — everything leadership needs to make strategic decisions about where to invest next.", category: "Analytics", relatedIds: [1, 7], color: "#c026d3" },   // magenta
 ]
 
 // ─── PAGE ───────────────────────────────────────────────────

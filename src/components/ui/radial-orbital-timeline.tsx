@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 export interface TimelineItem {
   id: number
@@ -27,6 +30,7 @@ interface RadialOrbitalTimelineProps {
   timelineData: TimelineItem[]
 }
 
+// Match main site typography
 const brandFont = { fontFamily: "var(--font-space-grotesk), sans-serif" }
 
 // ─── SINGLE CIRCLE ORBIT (clockwise, uniform) ────────────────
@@ -85,6 +89,7 @@ export function RadialOrbitalTimeline({
   const nodeRefs = useRef<(HTMLDivElement | null)[]>([])
   const svgRef = useRef<SVGSVGElement>(null)
   const centerRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   // Animation state (NOT React state — direct mutation for perf)
   const timeRef = useRef(0)
@@ -337,6 +342,16 @@ export function RadialOrbitalTimeline({
     [timelineData, handleItemClick]
   )
 
+  // ─── GSAP: detail card entrance (match site animations) ──
+  useEffect(() => {
+    if (!selectedItem || !cardRef.current) return
+    gsap.fromTo(
+      cardRef.current,
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }
+    )
+  }, [selectedItem])
+
   // ─── CONNECTION LINE PAIRS (for SVG) ──────────────────
   const connectionPairs = useMemo(() => {
     const pairs: { i: number; j: number }[] = []
@@ -349,13 +364,14 @@ export function RadialOrbitalTimeline({
   }, [timelineData.length])
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full h-[600px] md:h-[700px] overflow-hidden"
-      style={brandFont}
-    >
-      {/* ── Canvas: particles + trails ── */}
-      <canvas
+    <div className="w-full flex flex-col items-center" style={brandFont}>
+      {/* ── Orb area only: orbs + connections always fully visible ── */}
+      <div
+        ref={containerRef}
+        className="relative w-full h-[600px] md:h-[700px] overflow-hidden"
+      >
+        {/* ── Canvas: particles + trails ── */}
+        <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none z-0"
       />
@@ -529,10 +545,10 @@ export function RadialOrbitalTimeline({
                 )}
               </div>
 
-              {/* Label — bold when active/hover */}
+              {/* Label — site typography: tracking-wide, bold when active/hover */}
               <span
                 className={cn(
-                  "text-[10px] md:text-[11px] font-semibold tracking-wide text-center max-w-[80px] md:max-w-[100px] leading-tight transition-all duration-300",
+                  "text-[10px] md:text-[11px] font-medium tracking-[0.08em] uppercase text-center max-w-[80px] md:max-w-[100px] leading-tight transition-all duration-300",
                   isActive || isHovered ? "text-white" : "text-neutral-400"
                 )}
                 style={
@@ -547,13 +563,17 @@ export function RadialOrbitalTimeline({
           </div>
         )
       })}
+      </div>
 
-      {/* ── Detail card: fully opaque, positioned right so orbs stay visible ── */}
+      {/* ── Detail card: fixed at bottom of viewport so orbs are never covered ── */}
       {selectedItem && (
         <div
-          className="absolute bottom-0 left-0 right-0 z-[50] px-4 pb-4 md:px-0 md:pb-0 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:w-[340px] pointer-events-auto"
+          ref={cardRef}
+          className="fixed bottom-0 left-0 right-0 z-[50] px-4 pb-4 pt-2 pointer-events-auto flex justify-center"
           aria-label="Module details"
+          style={brandFont}
         >
+          <div className="w-full max-w-xl max-h-[45vh] overflow-y-auto rounded-xl">
           <Card
             className="text-white shadow-2xl border-2 border-white/20 overflow-hidden"
             style={{ background: "#0a0a0a" }}
@@ -571,11 +591,11 @@ export function RadialOrbitalTimeline({
                     <selectedItem.icon size={18} className="text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-base md:text-lg text-white tracking-[-0.01em]">
+                    <CardTitle className="text-base md:text-lg font-bold text-white tracking-[-0.02em]">
                       {selectedItem.title}
                     </CardTitle>
                     <Badge
-                      className="mt-1 text-[10px] uppercase tracking-[0.1em] border-0 font-semibold text-white"
+                      className="mt-1 text-[10px] uppercase tracking-[0.15em] border-0 font-semibold text-white"
                       style={{
                         backgroundColor: selectedItem.color,
                         boxShadow: `0 0 10px ${selectedItem.color}`,
@@ -596,13 +616,13 @@ export function RadialOrbitalTimeline({
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-neutral-300 leading-relaxed">
+              <p className="text-[15px] text-neutral-300 leading-relaxed tracking-[-0.01em]">
                 {selectedItem.content}
               </p>
 
               {selectedItem.relatedIds.length > 0 && (
                 <div className="pt-2 border-t border-white/15">
-                  <p className="text-[10px] uppercase tracking-[0.12em] text-neutral-400 mb-2">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 mb-2 font-medium">
                     Connected Modules
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -613,7 +633,7 @@ export function RadialOrbitalTimeline({
                         <button
                           key={rid}
                           onClick={() => navigateToRelated(rid)}
-                          className="text-[11px] font-medium text-white hover:opacity-90 border rounded-full px-2.5 py-1 transition-colors flex items-center gap-1"
+                          className="text-[11px] font-medium text-white hover:opacity-90 border rounded-full px-2.5 py-1 transition-colors flex items-center gap-1 uppercase tracking-[0.06em]"
                           style={{
                             borderColor: related.color,
                             boxShadow: `0 0 12px ${related.color}`,
@@ -629,6 +649,7 @@ export function RadialOrbitalTimeline({
               )}
             </CardContent>
           </Card>
+          </div>
         </div>
       )}
 
