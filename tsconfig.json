@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "velarix"]
+  "exclude": ["node_modules", "velarix", "velarix-legacy", "Velarix Web", "Skills"]
 }

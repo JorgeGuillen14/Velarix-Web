@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link"
 import { MeshGradient } from "@paper-design/shaders-react"
 import { Check, ArrowRight, Users, Shield, Sparkles, DollarSign } from "lucide-react"
 import SiteHeader from "@/components/ui/site-header"
@@ -228,7 +229,7 @@ export default function PricingPage() {
                   <div className="flex-1" />
 
                   {/* CTA */}
-                  <a href={tier.href} className="block">
+                  <Link href={tier.href} className="block">
                     <button
                       className={`
                         w-full py-3 rounded-full text-sm font-semibold tracking-wide uppercase transition-colors flex items-center justify-center gap-2
@@ -240,7 +241,7 @@ export default function PricingPage() {
                     >
                       {tier.cta} <ArrowRight className="h-4 w-4" />
                     </button>
-                  </a>
+                  </Link>
 
                   {/* Note */}
                   {tier.note && (
@@ -333,12 +334,12 @@ export default function PricingPage() {
               Schedule a demo with our team. We&apos;ll walk through the platform with your data and show you what&apos;s possible.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
+              <Link
                 href="/request-demo"
                 className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 tracking-wide uppercase"
               >
                 Request a Demo <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
               <a
                 href="mailto:contact@velarix.com"
                 className="px-8 py-3.5 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase text-center"

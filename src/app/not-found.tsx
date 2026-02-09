@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link"
 import { MeshGradient } from "@paper-design/shaders-react"
 import SiteHeader from "@/components/ui/site-header"
 import SiteFooter from "@/components/ui/site-footer"
@@ -29,18 +30,18 @@ export default function NotFound() {
                 The page you&apos;re looking for doesn&apos;t exist or has been moved.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
+                <Link
                   href="/"
                   className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors tracking-wide uppercase"
                 >
                   Back to Home
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/#contact"
                   className="px-8 py-3 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase"
                 >
                   Contact Us
-                </a>
+                </Link>
               </div>
             </div>
           </div>

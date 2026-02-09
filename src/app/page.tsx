@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
@@ -238,13 +239,13 @@ function Header() {
       style={{ ...brandFont, zIndex: 9990, pointerEvents: "auto", position: "fixed" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
-        <a
+        <Link
           href="/"
           className="text-white font-black text-xl tracking-[0.45em] uppercase"
           style={{ fontFamily: "'Courier New', 'SF Mono', 'Fira Code', monospace", pointerEvents: "auto" }}
         >
           VELARIX
-        </a>
+        </Link>
 
         {/* Desktop nav — click-based dropdowns */}
         <nav className="hidden md:flex items-center gap-8" style={{ pointerEvents: "auto" }}>
@@ -259,9 +260,9 @@ function Header() {
             </button>
             {openDropdown === "product" && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-52 bg-black border border-white/10 rounded-lg py-2 shadow-2xl" style={{ pointerEvents: "auto", zIndex: 9991 }}>
-                <a href="/kaptureops" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                <Link href="/kaptureops" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   KaptureOps AI
-                </a>
+                </Link>
               </div>
             )}
           </div>
@@ -280,9 +281,9 @@ function Header() {
                 <a href="#focus" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   What We Do
                 </a>
-                <a href="/team" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                <Link href="/team" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   Team
-                </a>
+                </Link>
               </div>
             )}
           </div>
@@ -290,19 +291,19 @@ function Header() {
           <a href="#focus" className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-2" style={{ pointerEvents: "auto" }}>
             Focus
           </a>
-          <a href="/pricing" className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-2" style={{ pointerEvents: "auto" }}>
+          <Link href="/pricing" className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-2" style={{ pointerEvents: "auto" }}>
             Pricing
-          </a>
+          </Link>
           <a href="#contact" className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-2" style={{ pointerEvents: "auto" }}>
             Contact
           </a>
-          <a
+          <Link
             href="/request-demo"
             className="px-6 py-2 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-200 transition-colors tracking-wide uppercase"
             style={{ pointerEvents: "auto" }}
           >
             Request Demo
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -319,28 +320,28 @@ function Header() {
       {/* Mobile menu */}
       {menuOpen && (
         <nav className="md:hidden flex flex-col items-center gap-4 pb-6 bg-black/90 backdrop-blur-md" style={{ pointerEvents: "auto" }}>
-          <a href="/kaptureops" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          <Link href="/kaptureops" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             KaptureOps AI
-          </a>
+          </Link>
           <a href="#focus" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             What We Do
           </a>
-          <a href="/team" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          <Link href="/team" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Team
-          </a>
-          <a href="/pricing" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          </Link>
+          <Link href="/pricing" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Pricing
-          </a>
+          </Link>
           <a href="#contact" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Contact
           </a>
-          <a
+          <Link
             href="/request-demo"
             onClick={() => setMenuOpen(false)}
             className="px-6 py-2 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-200 transition-colors tracking-wide uppercase"
           >
             Request Demo
-          </a>
+          </Link>
         </nav>
       )}
     </header>
@@ -519,11 +520,11 @@ function HeroSection() {
               Velarix built the operating system for government contractors. KaptureOps AI brings capture, compliance, proposals, finance, and teaming into one FedRAMP-ready platform so contractors can move faster, stay compliant, and win more work.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              <a href="/request-demo">
+              <Link href="/request-demo">
                 <MagneticButton className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </MagneticButton>
-              </a>
+              </Link>
               <a href="#focus">
                 <MagneticButton className="px-8 py-3 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
                   What We Do
@@ -797,11 +798,11 @@ function KaptureOpsCallout() {
                   The all-in-one operating system for defense contractors. Capture, proposals, teaming, compliance, finance, and contracts in one FedRAMP-ready platform.
                 </p>
               </div>
-              <a href="/kaptureops" className="relative shrink-0">
+              <Link href="/kaptureops" className="relative shrink-0">
                 <MagneticButton className="px-6 py-2.5 rounded-full border border-white/[0.1] text-white text-xs font-medium hover:bg-white/5 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Learn More <ArrowRight className="h-3 w-3" />
                 </MagneticButton>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -1050,11 +1051,11 @@ function FinalCTA() {
           {/* Right — CTA buttons + contact email */}
           <div className="flex flex-col items-start md:items-end gap-4 shrink-0">
             <div className="flex flex-col sm:flex-row gap-3">
-              <a href="/request-demo">
+              <Link href="/request-demo">
                 <MagneticButton className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </MagneticButton>
-              </a>
+              </Link>
               <a href="mailto:contact@velarix.com">
                 <MagneticButton className="px-8 py-3 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
                   Contact Velarix

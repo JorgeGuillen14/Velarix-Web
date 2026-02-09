@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import Link from "next/link"
 import { MeshGradient } from "@paper-design/shaders-react"
 import { ArrowRight, ChevronDown, Search, FileText, Users, Shield, DollarSign, Receipt, Layers, UserCheck, BarChart3 } from "lucide-react"
 import gsap from "gsap"
@@ -239,11 +240,11 @@ export default function KaptureOpsPage() {
               KaptureOps AI replaces fragmented tools with a single platform that automates the complete capture-to-contract lifecycle. Opportunity discovery, proposal generation, resume-based team building, compliance tracking, financial management, and contract oversight — one system that acts as both your operational backbone and strategic advisor.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <a href="/request-demo">
+              <Link href="/request-demo">
                 <MagneticButton className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </MagneticButton>
-              </a>
+              </Link>
               <a href="#capabilities">
                 <MagneticButton className="px-8 py-3.5 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
                   See Platform Capabilities
@@ -419,11 +420,11 @@ export default function KaptureOpsPage() {
               Your past performance is buried in SharePoint. Your team capabilities live in people&apos;s heads. Your compliance status is a spreadsheet someone forgot to update. KaptureOps AI fixes all of it.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/request-demo">
+              <Link href="/request-demo">
                 <MagneticButton className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </MagneticButton>
-              </a>
+              </Link>
               <a href="mailto:contact@velarix.com">
                 <MagneticButton className="px-8 py-3.5 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
                   Contact Velarix

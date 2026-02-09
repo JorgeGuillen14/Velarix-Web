@@ -38,7 +38,14 @@ yarn-error.log*
 
 # webflow extension scaffold
 /velarix
+/velarix-legacy
+
+# misc files
+Claude.dmg
+/Skills
+/Velarix Web
+.claude/
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+# next-env.d.ts

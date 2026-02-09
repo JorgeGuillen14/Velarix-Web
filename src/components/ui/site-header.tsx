@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from "react"
+import Link from "next/link"
 import { Menu, X, ChevronDown } from "lucide-react"
 
 const brandFont = { fontFamily: "var(--font-space-grotesk), sans-serif" }
@@ -40,13 +41,13 @@ export default function SiteHeader({ activePage }: SiteHeaderProps) {
       style={{ ...brandFont, zIndex: 9990, pointerEvents: "auto", position: "fixed" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
-        <a
+        <Link
           href="/"
           className="text-white font-black text-xl tracking-[0.45em] uppercase"
           style={{ fontFamily: "'Courier New', 'SF Mono', 'Fira Code', monospace", pointerEvents: "auto" }}
         >
           VELARIX
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8" style={{ pointerEvents: "auto" }}>
@@ -61,12 +62,12 @@ export default function SiteHeader({ activePage }: SiteHeaderProps) {
             </button>
             {openDropdown === "product" && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-52 bg-black border border-white/10 rounded-lg py-2 shadow-2xl" style={{ pointerEvents: "auto", zIndex: 9991 }}>
-                <a href="/kaptureops" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                <Link href="/kaptureops" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   KaptureOps AI
-                </a>
-                <a href="/pricing" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                </Link>
+                <Link href="/pricing" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   Pricing
-                </a>
+                </Link>
               </div>
             )}
           </div>
@@ -82,29 +83,29 @@ export default function SiteHeader({ activePage }: SiteHeaderProps) {
             </button>
             {openDropdown === "company" && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-52 bg-black border border-white/10 rounded-lg py-2 shadow-2xl" style={{ pointerEvents: "auto", zIndex: 9991 }}>
-                <a href="/#focus" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                <Link href="/#focus" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   What We Do
-                </a>
-                <a href="/team" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                </Link>
+                <Link href="/team" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   Team
-                </a>
-                <a href="/security" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                </Link>
+                <Link href="/security" onClick={() => setOpenDropdown(null)} className="block px-4 py-3 text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
                   Security
-                </a>
+                </Link>
               </div>
             )}
           </div>
 
-          <a href="/#contact" className={navLinkClass()} style={{ pointerEvents: "auto" }}>
+          <Link href="/#contact" className={navLinkClass()} style={{ pointerEvents: "auto" }}>
             Contact
-          </a>
-          <a
+          </Link>
+          <Link
             href="/request-demo"
             className="px-6 py-2 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-200 transition-colors tracking-wide uppercase"
             style={{ pointerEvents: "auto" }}
           >
             Request Demo
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -121,31 +122,31 @@ export default function SiteHeader({ activePage }: SiteHeaderProps) {
       {/* Mobile menu */}
       {menuOpen && (
         <nav className="md:hidden flex flex-col items-center gap-4 pb-6 bg-black/90 backdrop-blur-md" style={{ pointerEvents: "auto" }}>
-          <a href="/kaptureops" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          <Link href="/kaptureops" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             KaptureOps AI
-          </a>
-          <a href="/pricing" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          </Link>
+          <Link href="/pricing" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Pricing
-          </a>
-          <a href="/#focus" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          </Link>
+          <Link href="/#focus" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             What We Do
-          </a>
-          <a href="/team" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          </Link>
+          <Link href="/team" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Team
-          </a>
-          <a href="/security" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          </Link>
+          <Link href="/security" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Security
-          </a>
-          <a href="/#contact" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
+          </Link>
+          <Link href="/#contact" onClick={() => setMenuOpen(false)} className="text-sm text-neutral-300 hover:text-white transition-colors tracking-wide uppercase py-1">
             Contact
-          </a>
-          <a
+          </Link>
+          <Link
             href="/request-demo"
             onClick={() => setMenuOpen(false)}
             className="px-6 py-2 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-200 transition-colors tracking-wide uppercase"
           >
             Request Demo
-          </a>
+          </Link>
         </nav>
       )}
     </header>

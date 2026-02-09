@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link"
 import { MeshGradient } from "@paper-design/shaders-react"
 import { Shield, Lock, Server, Eye, FileCheck, Users, Globe, AlertTriangle } from "lucide-react"
 import SiteHeader from "@/components/ui/site-header"
@@ -143,12 +144,12 @@ export default function SecurityPage() {
               >
                 Contact Security Team
               </a>
-              <a
+              <Link
                 href="/request-demo"
                 className="px-8 py-3 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase"
               >
                 Request a Demo
-              </a>
+              </Link>
             </div>
           </div>
         </section>

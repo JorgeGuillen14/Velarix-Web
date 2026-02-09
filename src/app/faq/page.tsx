@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react"
+import Link from "next/link"
 import { MeshGradient } from "@paper-design/shaders-react"
 import { ChevronDown } from "lucide-react"
 import SiteHeader from "@/components/ui/site-header"
@@ -161,12 +162,12 @@ export default function FAQPage() {
               <p className="text-sm text-neutral-500 mb-6">
                 Our team is ready to help you understand how KaptureOps fits your operations.
               </p>
-              <a
+              <Link
                 href="/request-demo"
                 className="inline-block px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors tracking-wide uppercase"
               >
                 Request a Demo
-              </a>
+              </Link>
             </div>
           </div>
         </section>
