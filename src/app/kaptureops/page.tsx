@@ -9,6 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import SiteHeader from "@/components/ui/site-header"
 import SiteFooter from "@/components/ui/site-footer"
 import { RadialOrbitalTimeline, type TimelineItem } from "@/components/ui/radial-orbital-timeline"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -75,8 +76,8 @@ function useKaptureAnimations() {
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(".gsap-k-hero > *", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out", delay: 0.2 })
 
-      gsap.fromTo(".gsap-k-overview-col", { opacity: 0, y: 60 }, {
-        opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: "power3.out",
+      gsap.fromTo(".gsap-k-overview-col", { opacity: 0, y: 60, scale: 0.97 }, {
+        opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.12, ease: "power3.out",
         scrollTrigger: { trigger: ".gsap-k-overview", start: "top 85%", toggleActions: "play none none none" }
       })
 
@@ -85,13 +86,13 @@ function useKaptureAnimations() {
         scrollTrigger: { trigger: ".gsap-k-capabilities", start: "top 85%", toggleActions: "play none none none" }
       })
 
-      gsap.fromTo(".gsap-k-step", { opacity: 0, x: -30 }, {
-        opacity: 1, x: 0, duration: 0.6, stagger: 0.1, ease: "power3.out",
+      gsap.fromTo(".gsap-k-step", { opacity: 0, x: -30, scale: 0.98 }, {
+        opacity: 1, x: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: "power3.out",
         scrollTrigger: { trigger: ".gsap-k-how", start: "top 85%", toggleActions: "play none none none" }
       })
 
-      gsap.fromTo(".gsap-k-result", { opacity: 0, y: 40 }, {
-        opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power3.out",
+      gsap.fromTo(".gsap-k-result", { opacity: 0, y: 40, scale: 0.97 }, {
+        opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: "power3.out",
         scrollTrigger: { trigger: ".gsap-k-results", start: "top 85%", toggleActions: "play none none none" }
       })
 
@@ -105,9 +106,34 @@ function useKaptureAnimations() {
         scrollTrigger: { trigger: ".gsap-k-final-cta", start: "top 85%", toggleActions: "play none none none" }
       })
 
+      // Section headings with parallax-style entrance
       gsap.utils.toArray<HTMLElement>(".gsap-k-section-heading").forEach((el) => {
         gsap.fromTo(el, { opacity: 0, y: 50 }, {
           opacity: 1, y: 0, duration: 0.8, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" }
+        })
+      })
+
+      // Section dividers animate in
+      gsap.utils.toArray<HTMLElement>(".gsap-k-divider").forEach((el) => {
+        gsap.fromTo(el, { scaleX: 0 }, {
+          scaleX: 1, duration: 1.2, ease: "power2.inOut",
+          scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" }
+        })
+      })
+
+      // Parallax on section headings (subtle upward drift on scroll)
+      gsap.utils.toArray<HTMLElement>(".gsap-k-parallax").forEach((el) => {
+        gsap.to(el, {
+          yPercent: -8,
+          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1.5 }
+        })
+      })
+
+      // Inner card content stagger (like homepage gsap-focus-card-inner)
+      gsap.utils.toArray<HTMLElement>(".gsap-k-card-inner").forEach((el) => {
+        gsap.fromTo(el.children, { opacity: 0, y: 20 }, {
+          opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power3.out",
           scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" }
         })
       })
@@ -188,11 +214,16 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
+        {/* Divider */}
+        <div className="relative px-6 md:px-12 lg:px-20">
+          <div className="gsap-k-divider h-px bg-gradient-to-r from-transparent via-white/10 to-transparent max-w-6xl mx-auto origin-left" />
+        </div>
+
         {/* 2) PRODUCT OVERVIEW — same section pattern & typography as home */}
         <section className="gsap-k-overview relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-6xl mx-auto relative text-center">
-            <div className="gsap-k-section-heading mb-10">
+            <div className="gsap-k-section-heading gsap-k-parallax mb-10">
               <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
                 Product Overview
               </p>
@@ -201,57 +232,54 @@ export default function KaptureOpsPage() {
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
-              <div className="gsap-k-overview-col w-full max-w-md text-center">
-                <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">Find &amp; Win</h3>
-                <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
-                  AI-powered opportunity scoring, automated proposal generation, and intelligent team building — all in one workflow.
-                </p>
-                <ul className="space-y-2 text-left mx-auto max-w-xs">
-                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Pursue only what you can win
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Proposals drafted in minutes, not weeks
-                  </li>
-                </ul>
-              </div>
-              <div className="gsap-k-overview-col w-full max-w-md text-center">
-                <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">People &amp; Partners</h3>
-                <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
-                  Upload every resume in your organization. AI matches the best personnel and teaming partners to each pursuit automatically.
-                </p>
-                <ul className="space-y-2 text-left mx-auto max-w-xs">
-                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Always field your strongest team
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Gap analysis across every pursuit
-                  </li>
-                </ul>
-              </div>
-              <div className="gsap-k-overview-col w-full max-w-md text-center">
-                <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">Operate &amp; Grow</h3>
-                <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
-                  Compliance tracking, financial management, invoice automation, and contract oversight — continuously and automatically.
-                </p>
-                <ul className="space-y-2 text-left mx-auto max-w-xs">
-                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Always audit-ready, never scrambling
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Full visibility from award to closeout
-                  </li>
-                </ul>
-              </div>
+              {[
+                {
+                  title: "Find & Win",
+                  desc: "AI-powered opportunity scoring, automated proposal generation, and intelligent team building — all in one workflow.",
+                  bullets: ["Pursue only what you can win", "Proposals drafted in minutes, not weeks"],
+                },
+                {
+                  title: "People & Partners",
+                  desc: "Upload every resume in your organization. AI matches the best personnel and teaming partners to each pursuit automatically.",
+                  bullets: ["Always field your strongest team", "Gap analysis across every pursuit"],
+                },
+                {
+                  title: "Operate & Grow",
+                  desc: "Compliance tracking, financial management, invoice automation, and contract oversight — continuously and automatically.",
+                  bullets: ["Always audit-ready, never scrambling", "Full visibility from award to closeout"],
+                },
+              ].map((col) => (
+                <div key={col.title} className="gsap-k-overview-col relative w-full max-w-md rounded-2xl border border-white/[0.06] bg-black/40 backdrop-blur-sm p-6 md:p-8">
+                  <GlowingEffect spread={20} glow proximity={100} disabled={false} />
+                  <div className="gsap-k-card-inner relative z-10 text-center">
+                    <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">{col.title}</h3>
+                    <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
+                      {col.desc}
+                    </p>
+                    <ul className="space-y-2 text-left mx-auto max-w-xs">
+                      {col.bullets.map((b) => (
+                        <li key={b} className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />{b}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
+        {/* Divider */}
+        <div className="relative px-6 md:px-12 lg:px-20">
+          <div className="gsap-k-divider h-px bg-gradient-to-r from-transparent via-white/10 to-transparent max-w-6xl mx-auto origin-left" />
+        </div>
+
         {/* 3) PLATFORM CAPABILITIES — orbital timeline */}
         <section id="capabilities" className="gsap-k-capabilities relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
-          <div className="max-w-6xl mx-auto relative text-center">
-            <div className="gsap-k-section-heading mb-8">
+          <div className="max-w-7xl mx-auto relative text-center">
+            <div className="gsap-k-section-heading gsap-k-parallax mb-8">
               <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
                 9 Core Modules
               </p>
@@ -268,11 +296,16 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
+        {/* Divider */}
+        <div className="relative px-6 md:px-12 lg:px-20">
+          <div className="gsap-k-divider h-px bg-gradient-to-r from-transparent via-white/10 to-transparent max-w-6xl mx-auto origin-left" />
+        </div>
+
         {/* 4) HOW IT WORKS — same section pattern as home */}
         <section className="gsap-k-how relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-4xl mx-auto relative">
-            <div className="gsap-k-section-heading mb-12 text-center">
+            <div className="gsap-k-section-heading gsap-k-parallax mb-12 text-center">
               <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
                 Process
               </p>
@@ -282,9 +315,9 @@ export default function KaptureOpsPage() {
             </div>
             <div className="space-y-0">
               {steps.map((step) => (
-                <div key={step.num} className="gsap-k-step flex items-start gap-6 md:gap-8 py-6 border-t border-white/[0.06]">
-                  <span className="text-[13px] font-mono text-neutral-500 pt-0.5 flex-shrink-0">{step.num}</span>
-                  <div>
+                <div key={step.num} className="gsap-k-step relative group flex items-start gap-6 md:gap-8 py-6 border-t border-white/[0.06] rounded-lg px-4 md:px-6 hover:bg-white/[0.02] transition-colors duration-300">
+                  <span className="text-[13px] font-mono text-neutral-500 pt-0.5 flex-shrink-0 group-hover:text-white/60 transition-colors">{step.num}</span>
+                  <div className="gsap-k-card-inner">
                     <h3 className="text-base md:text-lg font-semibold text-white mb-1 tracking-[-0.01em]">{step.label}</h3>
                     <p className="text-[15px] leading-[1.6] text-neutral-400">{step.desc}</p>
                   </div>
@@ -294,11 +327,16 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
+        {/* Divider */}
+        <div className="relative px-6 md:px-12 lg:px-20">
+          <div className="gsap-k-divider h-px bg-gradient-to-r from-transparent via-white/10 to-transparent max-w-6xl mx-auto origin-left" />
+        </div>
+
         {/* 5) OUTCOMES — same section pattern as home */}
         <section className="gsap-k-results relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-6xl mx-auto relative text-center">
-            <div className="gsap-k-section-heading mb-10">
+            <div className="gsap-k-section-heading gsap-k-parallax mb-10">
               <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
                 Results
               </p>
@@ -307,18 +345,19 @@ export default function KaptureOpsPage() {
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-6 md:p-8 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">Win more</p>
-                <p className="text-[15px] leading-[1.6] text-neutral-400">Stronger proposals with AI-scored team composition and past performance matching.</p>
-              </div>
-              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-6 md:p-8 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">Spend less</p>
-                <p className="text-[15px] leading-[1.6] text-neutral-400">Replace 6-8 tools and cut $50K+ per proposal in labor. AI drafts in minutes.</p>
-              </div>
-              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-6 md:p-8 text-center">
-                <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">Stay ready</p>
-                <p className="text-[15px] leading-[1.6] text-neutral-400">Always CMMC-compliant, always DCAA audit-ready, always on top of contract milestones.</p>
-              </div>
+              {[
+                { title: "Win more", desc: "Stronger proposals with AI-scored team composition and past performance matching." },
+                { title: "Spend less", desc: "Replace 6-8 tools and cut $50K+ per proposal in labor. AI drafts in minutes." },
+                { title: "Stay ready", desc: "Always CMMC-compliant, always DCAA audit-ready, always on top of contract milestones." },
+              ].map((outcome) => (
+                <div key={outcome.title} className="gsap-k-result relative rounded-2xl border border-white/[0.06] bg-black/40 backdrop-blur-sm p-6 md:p-8 text-center group hover:border-white/[0.12] transition-colors duration-300">
+                  <GlowingEffect spread={20} glow proximity={100} disabled={false} />
+                  <div className="gsap-k-card-inner relative z-10">
+                    <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">{outcome.title}</p>
+                    <p className="text-[15px] leading-[1.6] text-neutral-400">{outcome.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
             <p className="mt-8 text-[12px] text-neutral-600 text-center max-w-xl mx-auto">
               Results vary by process maturity and data quality.
@@ -326,11 +365,16 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
+        {/* Divider */}
+        <div className="relative px-6 md:px-12 lg:px-20">
+          <div className="gsap-k-divider h-px bg-gradient-to-r from-transparent via-white/10 to-transparent max-w-6xl mx-auto origin-left" />
+        </div>
+
         {/* 6) SECURITY & GOVERNANCE — same bullets & typography as home */}
         <section id="security" className="gsap-k-security relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-3xl mx-auto relative text-center">
-            <div className="gsap-k-section-heading mb-10">
+            <div className="gsap-k-section-heading gsap-k-parallax mb-10">
               <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
                 Trust &amp; Compliance
               </p>

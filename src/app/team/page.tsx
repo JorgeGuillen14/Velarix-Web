@@ -5,7 +5,7 @@ import { MeshGradient } from "@paper-design/shaders-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion'
-import { ArrowUpRight, Minus, Plus, X, Linkedin, Twitter } from 'lucide-react'
+import { ArrowUpRight, X, Linkedin, Twitter } from 'lucide-react'
 import Image from 'next/image'
 import SiteHeader from "@/components/ui/site-header"
 import SiteFooter from "@/components/ui/site-footer"
@@ -190,21 +190,21 @@ function useTeamAnimations() {
 function TeamRow({
   data,
   index,
-  isActive,
-  setActiveId,
+  isHovered,
+  setHoveredId,
   isMobile,
-  isAnyActive,
-  onViewBio,
+  isAnyHovered,
+  onClickRow,
 }: {
   data: TeamMember
   index: number
-  isActive: boolean
-  setActiveId: (id: string | null) => void
+  isHovered: boolean
+  setHoveredId: (id: string | null) => void
   isMobile: boolean
-  isAnyActive: boolean
-  onViewBio: (member: TeamMember) => void
+  isAnyHovered: boolean
+  onClickRow: (member: TeamMember) => void
 }) {
-  const isDimmed = isAnyActive && !isActive
+  const isDimmed = isAnyHovered && !isHovered
 
   return (
     <motion.div
@@ -213,17 +213,14 @@ function TeamRow({
       animate={{
         opacity: isDimmed ? 0.3 : 1,
         y: 0,
-        backgroundColor: isActive && isMobile ? 'rgba(255,255,255,0.03)' : 'transparent'
       }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      onMouseEnter={() => !isMobile && setActiveId(data.id)}
-      onMouseLeave={() => !isMobile && setActiveId(null)}
-      onClick={() => isMobile && setActiveId(isActive ? null : data.id)}
-      className={`gsap-team-row group relative border-t border-neutral-800/60 transition-colors duration-500 last:border-b ${
-        isMobile ? 'cursor-pointer' : 'cursor-default'
-      }`}
+      onMouseEnter={() => !isMobile && setHoveredId(data.id)}
+      onMouseLeave={() => !isMobile && setHoveredId(null)}
+      onClick={() => onClickRow(data)}
+      className="gsap-team-row group relative border-t border-neutral-800/60 transition-colors duration-500 cursor-pointer last:border-b hover:bg-white/[0.02]"
     >
-      <div className="relative z-10 flex flex-col gap-3 py-6 px-2 md:flex-row md:items-center md:justify-between md:py-10 md:px-0">
+      <div className="relative z-10 flex items-center justify-between gap-3 py-6 px-2 md:py-10 md:px-0">
         {/* Name & Index */}
         <div className="flex items-center gap-4 md:gap-8 transition-transform duration-500 group-hover:translate-x-3">
           <span className="font-mono text-[11px] md:text-xs text-neutral-600 tabular-nums w-6 shrink-0">
@@ -234,68 +231,21 @@ function TeamRow({
           </h2>
         </div>
 
-        {/* Role, View Bio button, and Icons */}
-        <div className="flex items-center justify-between pl-10 md:justify-end md:gap-6 md:pl-0 shrink-0">
+        {/* Role + Arrow */}
+        <div className="flex items-center gap-4 md:gap-6 shrink-0">
           <span className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-neutral-600 transition-colors group-hover:text-neutral-400">
             {data.role}
           </span>
 
-          {/* View Bio button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); onViewBio(data) }}
-            className="ml-4 text-[10px] md:text-xs uppercase tracking-[0.15em] text-neutral-600 hover:text-white transition-colors border border-white/10 hover:border-white/30 rounded-full px-3 py-1"
-          >
-            Bio
-          </button>
-
-          {/* Mobile Toggle */}
-          <div className="block md:hidden text-neutral-500 ml-3">
-            {isActive ? <Minus size={16} /> : <Plus size={16} />}
-          </div>
-
-          {/* Desktop Arrow */}
+          {/* Arrow icon — visible on hover */}
           <motion.div
-            animate={{ x: isActive ? 0 : -10, opacity: isActive ? 1 : 0 }}
-            className="hidden md:block text-white ml-3"
+            animate={{ x: isHovered ? 0 : -10, opacity: isHovered ? 1 : 0 }}
+            className="text-white"
           >
-            <ArrowUpRight size={24} strokeWidth={1.5} />
+            <ArrowUpRight size={isMobile ? 18 : 24} strokeWidth={1.5} />
           </motion.div>
         </div>
       </div>
-
-      {/* Mobile accordion image */}
-      <AnimatePresence>
-        {isMobile && isActive && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden bg-neutral-900/30 rounded-lg mx-2 mb-4"
-          >
-            <div className="p-3">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
-                <Image
-                  src={data.image}
-                  alt={data.name}
-                  className="h-full w-full object-cover object-top"
-                  fill
-                  style={{ objectPosition: "center 15%", ...data.imageStyle }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-3 left-3">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onViewBio(data) }}
-                    className="text-[10px] uppercase tracking-widest text-white/80 border border-white/20 rounded-full px-3 py-1 hover:bg-white/10 transition-colors"
-                  >
-                    View Bio
-                  </button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   )
 }
@@ -304,7 +254,7 @@ function TeamRow({
 export default function TeamPage() {
   useTeamAnimations()
 
-  const [activeId, setActiveId] = useState<string | null>(null)
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [bioMember, setBioMember] = useState<TeamMember | null>(null)
 
@@ -366,11 +316,11 @@ export default function TeamPage() {
                   key={member.id}
                   data={member}
                   index={index}
-                  isActive={activeId === member.id}
-                  setActiveId={setActiveId}
+                  isHovered={hoveredId === member.id}
+                  setHoveredId={setHoveredId}
                   isMobile={isMobile}
-                  isAnyActive={activeId !== null}
-                  onViewBio={(m) => setBioMember(m)}
+                  isAnyHovered={hoveredId !== null}
+                  onClickRow={(m) => setBioMember(m)}
                 />
               ))}
             </div>
@@ -383,7 +333,7 @@ export default function TeamPage() {
               className="pointer-events-none fixed left-0 top-0 z-50 hidden md:block"
             >
               <AnimatePresence mode="wait">
-                {activeId && (
+                {hoveredId && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -392,7 +342,7 @@ export default function TeamPage() {
                     className="relative h-72 w-56 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-2xl"
                   >
                     {(() => {
-                      const member = TEAM.find((t) => t.id === activeId)
+                      const member = TEAM.find((t) => t.id === hoveredId)
                       return (
                         <Image
                           src={member?.image ?? ''}

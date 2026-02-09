@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { ArrowRight, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
@@ -342,13 +341,13 @@ export function RadialOrbitalTimeline({
     [timelineData, handleItemClick]
   )
 
-  // ─── GSAP: detail card entrance (match site animations) ──
+  // ─── GSAP: detail card entrance ──
   useEffect(() => {
     if (!selectedItem || !cardRef.current) return
     gsap.fromTo(
       cardRef.current,
-      { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }
+      { opacity: 0, x: 40, scale: 0.95 },
+      { opacity: 1, x: 0, scale: 1, duration: 0.55, ease: "power3.out" }
     )
   }, [selectedItem])
 
@@ -364,294 +363,308 @@ export function RadialOrbitalTimeline({
   }, [timelineData.length])
 
   return (
-    <div className="w-full flex flex-col items-center" style={brandFont}>
-      {/* ── Orb area only: orbs + connections always fully visible ── */}
-      <div
-        ref={containerRef}
-        className="relative w-full h-[600px] md:h-[700px] overflow-hidden"
-      >
-        {/* ── Canvas: particles + trails ── */}
-        <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      />
-
-      {/* ── SVG: ambient connection web ── */}
-      <svg
-        ref={svgRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-[5] hidden md:block"
-        aria-hidden="true"
-      >
-        {/* Center → node lines */}
-        {timelineData.map((_, i) => (
-          <line
-            key={`cl-${i}`}
-            className="center-line"
-            x1="50%"
-            y1="50%"
-            x2="50%"
-            y2="50%"
-            stroke="rgba(255,255,255,0.9)"
-            strokeOpacity="0.2"
-            strokeWidth="1"
-            strokeDasharray="2 8"
-          />
-        ))}
-        {/* Node ↔ node proximity lines — bright so connections pop */}
-        {connectionPairs.map((pair, idx) => (
-          <line
-            key={`conn-${idx}`}
-            className="conn-line"
-            x1="50%"
-            y1="50%"
-            x2="50%"
-            y2="50%"
-            stroke="rgba(255,255,255,0.95)"
-            strokeOpacity="0"
-            strokeWidth="1.5"
-          />
-        ))}
-      </svg>
-
-      {/* ── Center orb ── */}
-      <div
-        ref={centerRef}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-      >
-        <div className="relative">
-          {/* Rotating gradient ring */}
-          <div
-            className="absolute -inset-12 rounded-full opacity-[0.07]"
-            style={{
-              background: "conic-gradient(from 0deg, #06b6d4, #8b5cf6, #10b981, #f59e0b, #ef4444, #ec4899, #3b82f6, #06b6d4)",
-              animation: "orbital-spin 20s linear infinite",
-            }}
-          />
-          <div className="absolute -inset-12 rounded-full bg-black/60 backdrop-blur-sm" />
-
-          {/* Color glow rings */}
-          <div className="absolute -inset-20 rounded-full bg-gradient-to-br from-cyan-500/[0.04] via-transparent to-violet-500/[0.04] blur-3xl" />
-          <div
-            className="absolute -inset-14 rounded-full bg-gradient-to-tr from-emerald-500/[0.06] via-transparent to-blue-500/[0.06] blur-2xl"
-            style={{ animation: "orbital-breathe 4s ease-in-out infinite" }}
-          />
-
-          {/* Core + K.O.A acronym */}
-          <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-white/20 via-white/10 to-white/5 border border-white/15 flex items-center justify-center backdrop-blur-sm">
-            <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-white/80 animate-ping opacity-20" />
-            <span className="absolute text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/90">
-              K.O.A
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Orbital nodes ── */}
-      {timelineData.map((item, index) => {
-        const isActive = selectedItem?.id === item.id
-        const isPulsing = pulseIdsRef.current.includes(item.id)
-        const isDimmed = selectedItem !== null && !isActive && !isPulsing
-        const isHovered = hoveredId === item.id
-        const Icon = item.icon
-        const color = item.color
-
-        return (
-          <div
-            key={item.id}
-            ref={(el) => { nodeRefs.current[index] = el }}
-            className="absolute top-1/2 left-1/2 will-change-transform"
-            style={{ marginLeft: "-32px", marginTop: "-32px" }}
-          >
-            <button
-              onClick={() => handleItemClick(item)}
-              onMouseEnter={() => setHoveredId(item.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              className={cn(
-                "group relative flex flex-col items-center gap-2 cursor-pointer transition-[filter] duration-300",
-                isDimmed && "brightness-[0.25] blur-[0.5px]"
-              )}
-            >
-              {/* Active glow burst — bold, not pastel */}
-              {isActive && (
-                <div
-                  className="absolute -inset-6 rounded-full blur-2xl opacity-70 animate-pulse"
-                  style={{ backgroundColor: color }}
-                />
-              )}
-
-              {/* Pulsing ring for related nodes — bold */}
-              {isPulsing && (
-                <div
-                  className="absolute -inset-2 rounded-full animate-ping opacity-80"
-                  style={{ borderWidth: "2px", borderColor: color, borderStyle: "solid", boxShadow: `0 0 16px ${color}, 0 0 32px ${color}99` }}
-                />
-              )}
-
-              {/* Node circle — bold saturated colors, no pastels */}
-              <div
-                className={cn(
-                  "w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center border-2 relative transition-all duration-300",
-                  isHovered && !isActive && "scale-[1.15]",
-                  isActive && "scale-110"
-                )}
-                style={{
-                  background: isActive
-                    ? `linear-gradient(135deg, ${color}, ${color})`
-                    : isPulsing
-                    ? `linear-gradient(135deg, ${color}dd, ${color}99)`
-                    : `radial-gradient(circle at 30% 30%, ${color}, ${color}99 40%, rgba(0,0,0,0.85) 70%)`,
-                  borderColor: isActive
-                    ? color
-                    : isPulsing
-                    ? color
-                    : isHovered
-                    ? color
-                    : `${color}cc`,
-                  boxShadow: isActive
-                    ? `0 0 32px ${color}, 0 0 64px ${color}cc, inset 0 0 16px rgba(255,255,255,0.2)`
-                    : isPulsing
-                    ? `0 0 28px ${color}, 0 0 56px ${color}99`
-                    : isHovered
-                    ? `0 0 24px ${color}, 0 0 48px ${color}99`
-                    : `0 0 12px ${color}99`,
-                  backdropFilter: "blur(4px)",
-                }}
-              >
-                <div
-                  className="flex items-center justify-center"
-                  style={
-                    !isActive && !isHovered
-                      ? { filter: `drop-shadow(0 0 4px ${color})` }
-                      : { filter: `drop-shadow(0 0 8px rgba(255,255,255,0.9))` }
-                  }
-                >
-                  <Icon
-                    size={22}
-                    className={cn(
-                      "transition-all duration-300",
-                      isActive || isHovered ? "text-white" : "text-white/90"
-                    )}
-                  />
-                </div>
-
-                {/* Inner highlight on hover */}
-                {isHovered && !isActive && (
-                  <div
-                    className="absolute inset-0 rounded-full opacity-50 transition-opacity duration-300"
-                    style={{
-                      background: `radial-gradient(circle at 30% 30%, ${color}99, transparent 60%)`,
-                    }}
-                  />
-                )}
-              </div>
-
-              {/* Label — site typography: tracking-wide, bold when active/hover */}
-              <span
-                className={cn(
-                  "text-[10px] md:text-[11px] font-medium tracking-[0.08em] uppercase text-center max-w-[80px] md:max-w-[100px] leading-tight transition-all duration-300",
-                  isActive || isHovered ? "text-white" : "text-neutral-400"
-                )}
-                style={
-                  isActive || isHovered
-                    ? { textShadow: `0 0 8px ${color}, 0 0 16px ${color}99` }
-                    : undefined
-                }
-              >
-                {item.title}
-              </span>
-            </button>
-          </div>
-        )
-      })}
-      </div>
-
-      {/* ── Detail card: fixed at bottom of viewport so orbs are never covered ── */}
-      {selectedItem && (
+    <div className="w-full flex flex-col md:flex-row items-center md:items-stretch gap-6 md:gap-0" style={brandFont}>
+      {/* ── Left: Orb visualization area ── */}
+      <div className={cn(
+        "w-full transition-all duration-500",
+        selectedItem ? "md:w-[58%]" : "md:w-full"
+      )}>
         <div
-          ref={cardRef}
-          className="fixed bottom-0 left-0 right-0 z-[50] px-4 pb-4 pt-2 pointer-events-auto flex justify-center"
-          aria-label="Module details"
-          style={brandFont}
+          ref={containerRef}
+          className="relative w-full h-[500px] md:h-[700px] overflow-hidden"
         >
-          <div className="w-full max-w-xl max-h-[45vh] overflow-y-auto rounded-xl">
-          <Card
-            className="text-white shadow-2xl border-2 border-white/20 overflow-hidden"
-            style={{ background: "#0a0a0a" }}
+          {/* ── Canvas: particles + trails ── */}
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full pointer-events-none z-0"
+          />
+
+          {/* ── SVG: ambient connection web ── */}
+          <svg
+            ref={svgRef}
+            className="absolute inset-0 w-full h-full pointer-events-none z-[5] hidden md:block"
+            aria-hidden="true"
           >
-            <CardHeader className="pb-3 relative">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
+            {/* Center → node lines */}
+            {timelineData.map((_, i) => (
+              <line
+                key={`cl-${i}`}
+                className="center-line"
+                x1="50%"
+                y1="50%"
+                x2="50%"
+                y2="50%"
+                stroke="rgba(255,255,255,0.9)"
+                strokeOpacity="0.2"
+                strokeWidth="1"
+                strokeDasharray="2 8"
+              />
+            ))}
+            {/* Node ↔ node proximity lines — bright so connections pop */}
+            {connectionPairs.map((pair, idx) => (
+              <line
+                key={`conn-${idx}`}
+                className="conn-line"
+                x1="50%"
+                y1="50%"
+                x2="50%"
+                y2="50%"
+                stroke="rgba(255,255,255,0.95)"
+                strokeOpacity="0"
+                strokeWidth="1.5"
+              />
+            ))}
+          </svg>
+
+          {/* ── Center orb ── */}
+          <div
+            ref={centerRef}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+          >
+            <div className="relative">
+              {/* Rotating gradient ring */}
+              <div
+                className="absolute -inset-12 rounded-full opacity-[0.07]"
+                style={{
+                  background: "conic-gradient(from 0deg, #06b6d4, #8b5cf6, #10b981, #f59e0b, #ef4444, #ec4899, #3b82f6, #06b6d4)",
+                  animation: "orbital-spin 20s linear infinite",
+                }}
+              />
+              <div className="absolute -inset-12 rounded-full bg-black/60 backdrop-blur-sm" />
+
+              {/* Color glow rings */}
+              <div className="absolute -inset-20 rounded-full bg-gradient-to-br from-cyan-500/[0.04] via-transparent to-violet-500/[0.04] blur-3xl" />
+              <div
+                className="absolute -inset-14 rounded-full bg-gradient-to-tr from-emerald-500/[0.06] via-transparent to-blue-500/[0.06] blur-2xl"
+                style={{ animation: "orbital-breathe 4s ease-in-out infinite" }}
+              />
+
+              {/* Core + K.O.A acronym */}
+              <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-white/20 via-white/10 to-white/5 border border-white/15 flex items-center justify-center backdrop-blur-sm">
+                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-white/80 animate-ping opacity-20" />
+                <span className="absolute text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/90">
+                  K.O.A
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Orbital nodes ── */}
+          {timelineData.map((item, index) => {
+            const isActive = selectedItem?.id === item.id
+            const isPulsing = pulseIdsRef.current.includes(item.id)
+            const isDimmed = selectedItem !== null && !isActive && !isPulsing
+            const isHovered = hoveredId === item.id
+            const Icon = item.icon
+            const color = item.color
+
+            return (
+              <div
+                key={item.id}
+                ref={(el) => { nodeRefs.current[index] = el }}
+                className="absolute top-1/2 left-1/2 will-change-transform"
+                style={{ marginLeft: "-32px", marginTop: "-32px" }}
+              >
+                <button
+                  onClick={() => handleItemClick(item)}
+                  onMouseEnter={() => setHoveredId(item.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  className={cn(
+                    "group relative flex flex-col items-center gap-2 cursor-pointer transition-[filter] duration-300",
+                    isDimmed && "brightness-[0.25] blur-[0.5px]"
+                  )}
+                >
+                  {/* Active glow burst — bold, not pastel */}
+                  {isActive && (
+                    <div
+                      className="absolute -inset-6 rounded-full blur-2xl opacity-70 animate-pulse"
+                      style={{ backgroundColor: color }}
+                    />
+                  )}
+
+                  {/* Pulsing ring for related nodes — bold */}
+                  {isPulsing && (
+                    <div
+                      className="absolute -inset-2 rounded-full animate-ping opacity-80"
+                      style={{ borderWidth: "2px", borderColor: color, borderStyle: "solid", boxShadow: `0 0 16px ${color}, 0 0 32px ${color}99` }}
+                    />
+                  )}
+
+                  {/* Node circle — bold saturated colors, no pastels */}
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                    className={cn(
+                      "w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center border-2 relative transition-all duration-300",
+                      isHovered && !isActive && "scale-[1.15]",
+                      isActive && "scale-110"
+                    )}
                     style={{
-                      backgroundColor: selectedItem.color,
-                      boxShadow: `0 0 20px ${selectedItem.color}`,
+                      background: isActive
+                        ? `linear-gradient(135deg, ${color}, ${color})`
+                        : isPulsing
+                        ? `linear-gradient(135deg, ${color}dd, ${color}99)`
+                        : `radial-gradient(circle at 30% 30%, ${color}, ${color}99 40%, rgba(0,0,0,0.85) 70%)`,
+                      borderColor: isActive
+                        ? color
+                        : isPulsing
+                        ? color
+                        : isHovered
+                        ? color
+                        : `${color}cc`,
+                      boxShadow: isActive
+                        ? `0 0 32px ${color}, 0 0 64px ${color}cc, inset 0 0 16px rgba(255,255,255,0.2)`
+                        : isPulsing
+                        ? `0 0 28px ${color}, 0 0 56px ${color}99`
+                        : isHovered
+                        ? `0 0 24px ${color}, 0 0 48px ${color}99`
+                        : `0 0 12px ${color}99`,
+                      backdropFilter: "blur(4px)",
                     }}
                   >
-                    <selectedItem.icon size={18} className="text-white" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-base md:text-lg font-bold text-white tracking-[-0.02em]">
-                      {selectedItem.title}
-                    </CardTitle>
-                    <Badge
-                      className="mt-1 text-[10px] uppercase tracking-[0.15em] border-0 font-semibold text-white"
-                      style={{
-                        backgroundColor: selectedItem.color,
-                        boxShadow: `0 0 10px ${selectedItem.color}`,
-                      }}
+                    <div
+                      className="flex items-center justify-center"
+                      style={
+                        !isActive && !isHovered
+                          ? { filter: `drop-shadow(0 0 4px ${color})` }
+                          : { filter: `drop-shadow(0 0 8px rgba(255,255,255,0.9))` }
+                      }
                     >
-                      {selectedItem.category}
-                    </Badge>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleClose}
-                  className="text-neutral-400 hover:text-white hover:bg-white/10 h-8 w-8 flex-shrink-0"
-                >
-                  <X size={16} />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-[15px] text-neutral-300 leading-relaxed tracking-[-0.01em]">
-                {selectedItem.content}
-              </p>
+                      <Icon
+                        size={22}
+                        className={cn(
+                          "transition-all duration-300",
+                          isActive || isHovered ? "text-white" : "text-white/90"
+                        )}
+                      />
+                    </div>
 
-              {selectedItem.relatedIds.length > 0 && (
-                <div className="pt-2 border-t border-white/15">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 mb-2 font-medium">
-                    Connected Modules
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedItem.relatedIds.map((rid) => {
-                      const related = timelineData.find((d) => d.id === rid)
-                      if (!related) return null
-                      return (
-                        <button
-                          key={rid}
-                          onClick={() => navigateToRelated(rid)}
-                          className="text-[11px] font-medium text-white hover:opacity-90 border rounded-full px-2.5 py-1 transition-colors flex items-center gap-1 uppercase tracking-[0.06em]"
+                    {/* Inner highlight on hover */}
+                    {isHovered && !isActive && (
+                      <div
+                        className="absolute inset-0 rounded-full opacity-50 transition-opacity duration-300"
+                        style={{
+                          background: `radial-gradient(circle at 30% 30%, ${color}99, transparent 60%)`,
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  {/* Label — site typography: tracking-wide, bold when active/hover */}
+                  <span
+                    className={cn(
+                      "text-[10px] md:text-[11px] font-medium tracking-[0.08em] uppercase text-center max-w-[80px] md:max-w-[100px] leading-tight transition-all duration-300",
+                      isActive || isHovered ? "text-white" : "text-neutral-400"
+                    )}
+                    style={
+                      isActive || isHovered
+                        ? { textShadow: `0 0 8px ${color}, 0 0 16px ${color}99` }
+                        : undefined
+                    }
+                  >
+                    {item.title}
+                  </span>
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ── Right: Detail panel (inline, never covers orbs) ── */}
+      <div className={cn(
+        "w-full md:w-[42%] flex items-center justify-center transition-all duration-500 min-h-[200px] md:min-h-0",
+        !selectedItem && "md:w-0 md:overflow-hidden md:opacity-0"
+      )}>
+        {selectedItem ? (
+          <div
+            ref={cardRef}
+            className="w-full px-4 md:px-6 md:py-8 flex items-start justify-center"
+            aria-label="Module details"
+            style={brandFont}
+          >
+            <div className="w-full max-w-md">
+              <Card
+                className="text-white shadow-2xl border-2 border-white/20 overflow-hidden"
+                style={{ background: "#0a0a0a" }}
+              >
+                <CardHeader className="pb-3 relative">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{
+                          backgroundColor: selectedItem.color,
+                          boxShadow: `0 0 20px ${selectedItem.color}`,
+                        }}
+                      >
+                        <selectedItem.icon size={18} className="text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-base md:text-lg font-bold text-white tracking-[-0.02em]">
+                          {selectedItem.title}
+                        </CardTitle>
+                        <Badge
+                          className="mt-1 text-[10px] uppercase tracking-[0.15em] border-0 font-semibold text-white"
                           style={{
-                            borderColor: related.color,
-                            boxShadow: `0 0 12px ${related.color}`,
+                            backgroundColor: selectedItem.color,
+                            boxShadow: `0 0 10px ${selectedItem.color}`,
                           }}
                         >
-                          {related.title}
-                          <ArrowRight size={9} />
-                        </button>
-                      )
-                    })}
+                          {selectedItem.category}
+                        </Badge>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleClose}
+                      className="text-neutral-400 hover:text-white hover:bg-white/10 h-8 w-8 flex-shrink-0 rounded-md flex items-center justify-center transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
                   </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-[15px] text-neutral-300 leading-relaxed tracking-[-0.01em]">
+                    {selectedItem.content}
+                  </p>
+
+                  {selectedItem.relatedIds.length > 0 && (
+                    <div className="pt-2 border-t border-white/15">
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 mb-2 font-medium">
+                        Connected Modules
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedItem.relatedIds.map((rid) => {
+                          const related = timelineData.find((d) => d.id === rid)
+                          if (!related) return null
+                          return (
+                            <button
+                              key={rid}
+                              onClick={() => navigateToRelated(rid)}
+                              className="text-[11px] font-medium text-white hover:opacity-90 border rounded-full px-2.5 py-1 transition-colors flex items-center gap-1 uppercase tracking-[0.06em]"
+                              style={{
+                                borderColor: related.color,
+                                boxShadow: `0 0 12px ${related.color}`,
+                              }}
+                            >
+                              {related.title}
+                              <ArrowRight size={9} />
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="hidden md:flex items-center justify-center w-full h-full">
+            <p className="text-neutral-600 text-sm tracking-[0.15em] uppercase animate-pulse">
+              Select a module to explore
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* ── CSS keyframes (global style tag) ── */}
       <style dangerouslySetInnerHTML={{ __html: `
