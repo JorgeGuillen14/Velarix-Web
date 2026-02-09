@@ -455,23 +455,23 @@ export function RadialOrbitalTimeline({
                 isDimmed && "brightness-[0.25] blur-[0.5px]"
               )}
             >
-              {/* Active glow burst */}
+              {/* Active glow burst — bold, not pastel */}
               {isActive && (
                 <div
-                  className="absolute -inset-6 rounded-full blur-2xl opacity-40 animate-pulse"
+                  className="absolute -inset-6 rounded-full blur-2xl opacity-70 animate-pulse"
                   style={{ backgroundColor: color }}
                 />
               )}
 
-              {/* Pulsing ring for related nodes — bright */}
+              {/* Pulsing ring for related nodes — bold */}
               {isPulsing && (
                 <div
-                  className="absolute -inset-2 rounded-full animate-ping opacity-50"
-                  style={{ borderWidth: "2px", borderColor: color, borderStyle: "solid", boxShadow: `0 0 12px ${color}` }}
+                  className="absolute -inset-2 rounded-full animate-ping opacity-80"
+                  style={{ borderWidth: "2px", borderColor: color, borderStyle: "solid", boxShadow: `0 0 16px ${color}, 0 0 32px ${color}99` }}
                 />
               )}
 
-              {/* Node circle — loud colors, strong glow */}
+              {/* Node circle — bold saturated colors, no pastels */}
               <div
                 className={cn(
                   "w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center border-2 relative transition-all duration-300",
@@ -480,24 +480,24 @@ export function RadialOrbitalTimeline({
                 )}
                 style={{
                   background: isActive
-                    ? `linear-gradient(135deg, ${color}, ${color}ee)`
+                    ? `linear-gradient(135deg, ${color}, ${color})`
                     : isPulsing
-                    ? `${color}40`
-                    : `radial-gradient(circle at 35% 35%, ${color}30, rgba(0,0,0,0.7))`,
+                    ? `linear-gradient(135deg, ${color}dd, ${color}99)`
+                    : `radial-gradient(circle at 30% 30%, ${color}, ${color}99 40%, rgba(0,0,0,0.85) 70%)`,
                   borderColor: isActive
                     ? color
                     : isPulsing
-                    ? `${color}99`
+                    ? color
                     : isHovered
-                    ? `${color}99`
-                    : `${color}50`,
+                    ? color
+                    : `${color}cc`,
                   boxShadow: isActive
-                    ? `0 0 40px ${color}99, 0 0 80px ${color}50, inset 0 0 20px ${color}50`
+                    ? `0 0 32px ${color}, 0 0 64px ${color}cc, inset 0 0 16px rgba(255,255,255,0.2)`
                     : isPulsing
-                    ? `0 0 35px ${color}60, 0 0 60px ${color}30`
+                    ? `0 0 28px ${color}, 0 0 56px ${color}99`
                     : isHovered
-                    ? `0 0 28px ${color}50, 0 0 56px ${color}25`
-                    : `0 0 16px ${color}30`,
+                    ? `0 0 24px ${color}, 0 0 48px ${color}99`
+                    : `0 0 12px ${color}99`,
                   backdropFilter: "blur(4px)",
                 }}
               >
@@ -505,49 +505,39 @@ export function RadialOrbitalTimeline({
                   className="flex items-center justify-center"
                   style={
                     !isActive && !isHovered
-                      ? { filter: `drop-shadow(0 0 3px ${color}40)` }
-                      : isHovered
-                      ? { filter: `drop-shadow(0 0 6px ${color}60)` }
-                      : undefined
+                      ? { filter: `drop-shadow(0 0 4px ${color})` }
+                      : { filter: `drop-shadow(0 0 8px rgba(255,255,255,0.9))` }
                   }
                 >
                   <Icon
                     size={22}
                     className={cn(
                       "transition-all duration-300",
-                      isActive
-                        ? "text-white"
-                        : isHovered
-                        ? "text-white"
-                        : "text-neutral-300"
+                      isActive || isHovered ? "text-white" : "text-white/90"
                     )}
                   />
                 </div>
 
-                {/* Inner glow on hover */}
+                {/* Inner highlight on hover */}
                 {isHovered && !isActive && (
                   <div
-                    className="absolute inset-0 rounded-full opacity-40 transition-opacity duration-300"
+                    className="absolute inset-0 rounded-full opacity-50 transition-opacity duration-300"
                     style={{
-                      background: `radial-gradient(circle at center, ${color}20, transparent 70%)`,
+                      background: `radial-gradient(circle at 30% 30%, ${color}99, transparent 60%)`,
                     }}
                   />
                 )}
               </div>
 
-              {/* Label */}
+              {/* Label — bold when active/hover */}
               <span
                 className={cn(
-                  "text-[10px] md:text-[11px] font-medium tracking-wide text-center max-w-[80px] md:max-w-[100px] leading-tight transition-all duration-300",
-                  isActive
-                    ? "text-white"
-                    : isHovered
-                    ? "text-white"
-                    : "text-neutral-500"
+                  "text-[10px] md:text-[11px] font-semibold tracking-wide text-center max-w-[80px] md:max-w-[100px] leading-tight transition-all duration-300",
+                  isActive || isHovered ? "text-white" : "text-neutral-400"
                 )}
                 style={
                   isActive || isHovered
-                    ? { textShadow: `0 0 10px ${color}40` }
+                    ? { textShadow: `0 0 8px ${color}, 0 0 16px ${color}99` }
                     : undefined
                 }
               >
@@ -558,18 +548,24 @@ export function RadialOrbitalTimeline({
         )
       })}
 
-      {/* ── Detail card: solid so it doesn’t obscure orbs, vibrant accents ── */}
+      {/* ── Detail card: fully opaque, positioned right so orbs stay visible ── */}
       {selectedItem && (
-        <div className="absolute bottom-0 left-0 right-0 z-30 px-4 md:px-0 md:left-1/2 md:-translate-x-1/2 md:bottom-4 md:w-[500px] pointer-events-auto">
-          <Card className="border-2 border-white/25 bg-black text-white shadow-2xl shadow-black/60">
+        <div
+          className="absolute bottom-0 left-0 right-0 z-[50] px-4 pb-4 md:px-0 md:pb-0 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:w-[340px] pointer-events-auto"
+          aria-label="Module details"
+        >
+          <Card
+            className="text-white shadow-2xl border-2 border-white/20 overflow-hidden"
+            style={{ background: "#0a0a0a" }}
+          >
             <CardHeader className="pb-3 relative">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg"
+                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                     style={{
                       backgroundColor: selectedItem.color,
-                      boxShadow: `0 0 24px ${selectedItem.color}, 0 0 48px ${selectedItem.color}80`,
+                      boxShadow: `0 0 20px ${selectedItem.color}`,
                     }}
                   >
                     <selectedItem.icon size={18} className="text-white" />
@@ -579,11 +575,10 @@ export function RadialOrbitalTimeline({
                       {selectedItem.title}
                     </CardTitle>
                     <Badge
-                      className="mt-1 text-[10px] uppercase tracking-[0.1em] border-0 font-semibold"
+                      className="mt-1 text-[10px] uppercase tracking-[0.1em] border-0 font-semibold text-white"
                       style={{
-                        backgroundColor: `${selectedItem.color}55`,
-                        color: "white",
-                        boxShadow: `0 0 12px ${selectedItem.color}60`,
+                        backgroundColor: selectedItem.color,
+                        boxShadow: `0 0 10px ${selectedItem.color}`,
                       }}
                     >
                       {selectedItem.category}
@@ -618,9 +613,10 @@ export function RadialOrbitalTimeline({
                         <button
                           key={rid}
                           onClick={() => navigateToRelated(rid)}
-                          className="text-[11px] text-white/90 hover:text-white border border-white/25 hover:border-white/50 rounded-full px-2.5 py-1 transition-colors flex items-center gap-1"
+                          className="text-[11px] font-medium text-white hover:opacity-90 border rounded-full px-2.5 py-1 transition-colors flex items-center gap-1"
                           style={{
-                            boxShadow: `0 0 8px ${related.color}40`,
+                            borderColor: related.color,
+                            boxShadow: `0 0 12px ${related.color}`,
                           }}
                         >
                           {related.title}

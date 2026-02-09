@@ -119,7 +119,7 @@ function useKaptureAnimations() {
   }, [])
 }
 
-// ─── KAPTUREOPS CAPABILITIES DATA ───────────────────────────
+// ─── KAPTUREOPS CAPABILITIES DATA (bold, saturated colors — no pastels) ───
 const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
   {
     id: 1,
@@ -128,7 +128,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "AI monitors federal marketplaces and scores every opportunity against your company profile. Know what to pursue and what to pass — before your competitors even see the listing.",
     category: "Discovery",
     relatedIds: [2, 3],
-    color: "#06b6d4", // cyan
+    color: "#00d4ff", // bright cyan
   },
   {
     id: 2,
@@ -146,7 +146,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "AI-powered partner matching and gap analysis. Build the strongest possible team for every pursuit by surfacing the right partners, subcontractors, and joint venture candidates.",
     category: "Teaming",
     relatedIds: [1, 2, 8],
-    color: "#10b981", // emerald
+    color: "#00e676", // electric green
   },
   {
     id: 4,
@@ -155,7 +155,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "Continuous monitoring across every certification, clearance, and regulatory requirement your organization needs. Alerts before anything expires. Compliance as a steady state, not a scramble.",
     category: "Compliance",
     relatedIds: [5, 7],
-    color: "#f59e0b", // amber
+    color: "#ffab00", // bold amber
   },
   {
     id: 5,
@@ -164,7 +164,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "Indirect rate calculations, cost pool management, and audit-ready documentation — all automated. Replace the spreadsheets your finance team dreads every month.",
     category: "Finance",
     relatedIds: [4, 6],
-    color: "#ef4444", // red
+    color: "#ff1744", // bold red
   },
   {
     id: 6,
@@ -173,7 +173,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "AI-powered invoice processing that reads, matches, and verifies every line item against your contracts. Eliminate manual entry errors and accelerate payment cycles.",
     category: "Accounts Payable",
     relatedIds: [5, 7],
-    color: "#ec4899", // pink
+    color: "#f50057", // bold pink
   },
   {
     id: 7,
@@ -182,7 +182,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "Full lifecycle oversight from award to closeout. Track spend against ceilings, manage deliverables, and surface analytics that sharpen your strategy for the next pursuit.",
     category: "Contracts",
     relatedIds: [4, 6, 9],
-    color: "#3b82f6", // blue
+    color: "#2979ff", // bold blue
   },
   {
     id: 8,
@@ -191,7 +191,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "Upload your entire company roster. The platform parses every resume and matches personnel to opportunities based on past performance, clearances, certifications, and role fit — so you always put your best people forward.",
     category: "Personnel",
     relatedIds: [2, 3],
-    color: "#14b8a6", // teal
+    color: "#00e5a0", // bold teal
   },
   {
     id: 9,
@@ -200,7 +200,7 @@ const KAPTUREOPS_CAPABILITIES: TimelineItem[] = [
     content: "Real-time visibility into your entire capture pipeline. Win/loss trends, pursuit velocity, and forecasting — everything leadership needs to make strategic decisions about where to invest next.",
     category: "Analytics",
     relatedIds: [1, 7],
-    color: "#a855f7", // purple
+    color: "#b388ff", // bold purple
   },
 ]
 
