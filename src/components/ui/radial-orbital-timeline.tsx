@@ -29,32 +29,10 @@ interface RadialOrbitalTimelineProps {
 
 const brandFont = { fontFamily: "var(--font-space-grotesk), sans-serif" }
 
-// ─── LISSAJOUS ORBIT CONFIGS ────────────────────────────────
-// Each node gets unique frequency ratios (a, b) creating figure-8s, loops, trefoils
-interface NodeOrbit {
-  radiusX: number
-  radiusY: number
-  a: number       // x frequency
-  b: number       // y frequency
-  phaseX: number  // x phase offset (radians)
-  phaseY: number  // y phase offset (radians)
-  speed: number   // time multiplier
-  // mobile
-  radiusXSm: number
-  radiusYSm: number
-}
-
-const ORBIT_CONFIGS: NodeOrbit[] = [
-  { radiusX: 220, radiusY: 150, a: 3, b: 2, phaseX: 0,    phaseY: 0.5,  speed: 0.15,  radiusXSm: 120, radiusYSm: 85 },
-  { radiusX: 190, radiusY: 170, a: 2, b: 3, phaseX: 1.2,  phaseY: 0,    speed: 0.12,  radiusXSm: 110, radiusYSm: 95 },
-  { radiusX: 250, radiusY: 130, a: 5, b: 4, phaseX: 0.8,  phaseY: 1.5,  speed: 0.10,  radiusXSm: 135, radiusYSm: 75 },
-  { radiusX: 175, radiusY: 190, a: 3, b: 4, phaseX: 2.1,  phaseY: 0.3,  speed: 0.13,  radiusXSm: 100, radiusYSm: 105 },
-  { radiusX: 235, radiusY: 145, a: 4, b: 3, phaseX: 0.4,  phaseY: 2.0,  speed: 0.11,  radiusXSm: 130, radiusYSm: 80 },
-  { radiusX: 200, radiusY: 160, a: 5, b: 3, phaseX: 1.8,  phaseY: 1.1,  speed: 0.14,  radiusXSm: 115, radiusYSm: 90 },
-  { radiusX: 260, radiusY: 140, a: 2, b: 5, phaseX: 0.6,  phaseY: 2.5,  speed: 0.09,  radiusXSm: 140, radiusYSm: 78 },
-  { radiusX: 165, radiusY: 180, a: 4, b: 5, phaseX: 2.8,  phaseY: 0.7,  speed: 0.16,  radiusXSm: 95,  radiusYSm: 100 },
-  { radiusX: 245, radiusY: 155, a: 3, b: 5, phaseX: 1.0,  phaseY: 1.8,  speed: 0.105, radiusXSm: 132, radiusYSm: 88 },
-]
+// ─── SINGLE CIRCLE ORBIT (clockwise, uniform) ────────────────
+const ORBIT_RADIUS = 200
+const ORBIT_RADIUS_SM = 110
+const ORBIT_SPEED = 0.12 // degrees per frame (~clockwise)
 
 // ─── PARTICLE SYSTEM (canvas) ───────────────────────────────
 interface Particle {
@@ -93,10 +71,6 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
     : { r: 255, g: 255, b: 255 }
 }
 
-// ─── TRAIL RING BUFFER ──────────────────────────────────────
-const TRAIL_LENGTH = 6
-const TRAIL_SAMPLE_INTERVAL = 4 // sample every N frames
-
 // ─── COMPONENT ──────────────────────────────────────────────
 export function RadialOrbitalTimeline({
   timelineData,
@@ -117,15 +91,14 @@ export function RadialOrbitalTimeline({
   const frameRef = useRef(0)
   const animRef = useRef<number>(0)
   const positionsRef = useRef<{ x: number; y: number; z: number }[]>([])
-  const trailsRef = useRef<{ x: number; y: number }[][]>([])
   const isMobileRef = useRef(false)
   const particlesRef = useRef<Particle[]>([])
   const selectedIdRef = useRef<number | null>(null)
   const pulseIdsRef = useRef<number[]>([])
   const sizeRef = useRef({ w: 0, h: 0 })
   const mountedRef = useRef(false)
+  const rotationRef = useRef(0) // degrees, decreases for clockwise
 
-  const orbits = useMemo(() => ORBIT_CONFIGS.slice(0, timelineData.length), [timelineData.length])
   const colors = useMemo(() => timelineData.map((d) => d.color), [timelineData])
 
   // ─── INIT ───────────────────────────────────────────────
@@ -135,7 +108,6 @@ export function RadialOrbitalTimeline({
 
     // Init position buffers
     positionsRef.current = Array.from({ length: count }, () => ({ x: 0, y: 0, z: 0 }))
-    trailsRef.current = Array.from({ length: count }, () => [])
 
     // Init particles
     const container = containerRef.current
@@ -176,24 +148,16 @@ export function RadialOrbitalTimeline({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // ─── COMPUTE NODE POSITION (Lissajous) ─────────────────
-  const computePosition = useCallback(
-    (orbit: NodeOrbit, t: number) => {
-      const mobile = isMobileRef.current
-      const rx = mobile ? orbit.radiusXSm : orbit.radiusX
-      const ry = mobile ? orbit.radiusYSm : orbit.radiusY
-
-      const x = rx * Math.sin(orbit.a * t * orbit.speed + orbit.phaseX)
-      const y = ry * Math.sin(orbit.b * t * orbit.speed + orbit.phaseY)
-
-      // Pseudo-Z for depth: derived from y-position normalized
-      const maxR = Math.max(rx, ry)
-      const z = y / maxR // -1 to 1, where -1 = far, 1 = near
-
-      return { x, y, z }
-    },
-    []
-  )
+  // ─── COMPUTE NODE POSITION (single circle, clockwise) ───
+  const computePosition = useCallback((index: number, total: number, rotationDeg: number) => {
+    const r = isMobileRef.current ? ORBIT_RADIUS_SM : ORBIT_RADIUS
+    const angleDeg = (index / total) * 360 + rotationDeg
+    const angleRad = (angleDeg * Math.PI) / 180
+    const x = r * Math.cos(angleRad)
+    const y = r * Math.sin(angleRad)
+    const z = y / r
+    return { x, y, z }
+  }, [])
 
   // ─── MAIN ANIMATION LOOP ──────────────────────────────
   useEffect(() => {
@@ -225,22 +189,23 @@ export function RadialOrbitalTimeline({
       const cy = h / 2
 
       if (!paused) {
-        timeRef.current += 0.016 // ~60fps timestep
+        rotationRef.current -= ORBIT_SPEED
+        if (rotationRef.current <= -360) rotationRef.current += 360
       }
       frameRef.current++
-      const t = timeRef.current
-
-      // ── 1. Update node positions via GSAP.set (direct DOM) ──
+      const rotationDeg = rotationRef.current
+      const n = timelineData.length
       const positions = positionsRef.current
-      orbits.forEach((orbit, i) => {
-        const pos = computePosition(orbit, t)
+
+      // ── 1. Update node positions (single circle, clockwise) ──
+      for (let i = 0; i < n; i++) {
+        const pos = computePosition(i, n, rotationDeg)
         positions[i] = pos
 
         const el = nodeRefs.current[i]
         if (el) {
-          // Depth scaling: z ranges -1..1
-          const depthScale = 0.82 + (pos.z + 1) * 0.14 // 0.82..1.10
-          const depthOpacity = 0.55 + (pos.z + 1) * 0.225 // 0.55..1.0
+          const depthScale = 0.92 + (pos.z + 1) * 0.06
+          const depthOpacity = 0.7 + (pos.z + 1) * 0.15
           const depthZIndex = Math.round((pos.z + 1) * 10) + 20
 
           gsap.set(el, {
@@ -251,58 +216,27 @@ export function RadialOrbitalTimeline({
             zIndex: depthZIndex,
           })
         }
+      }
 
-        // Trail sampling
-        if (!paused && frameRef.current % TRAIL_SAMPLE_INTERVAL === 0 && !isMobileRef.current) {
-          const trail = trailsRef.current[i]
-          trail.push({ x: pos.x, y: pos.y })
-          if (trail.length > TRAIL_LENGTH) trail.shift()
-        }
-      })
-
-      // ── 2. Draw canvas: particles + trails ──
+      // ── 2. Draw canvas: particles ──
       ctx.clearRect(0, 0, w, h)
-
-      // Particles
       const particles = particlesRef.current
+      const t = frameRef.current * 0.016
       particles.forEach((p) => {
         if (!paused) {
           p.x += p.vx + Math.sin(t * 0.5 + p.phase) * 0.15
           p.y += p.vy + Math.cos(t * 0.3 + p.phase) * 0.15
-
-          // Wrap around
           if (p.x < 0) p.x = w
           if (p.x > w) p.x = 0
           if (p.y < 0) p.y = h
           if (p.y > h) p.y = 0
         }
-
         const rgb = hexToRgb(p.color)
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${p.opacity})`
         ctx.fill()
       })
-
-      // Trails (desktop only)
-      if (!isMobileRef.current) {
-        trailsRef.current.forEach((trail, i) => {
-          if (trail.length < 2) return
-          const color = colors[i]
-          const rgb = hexToRgb(color)
-
-          trail.forEach((point, j) => {
-            const progress = j / trail.length
-            const alpha = progress * 0.12 + 0.02
-            const size = progress * 4 + 1.5
-
-            ctx.beginPath()
-            ctx.arc(cx + point.x, cy + point.y, size, 0, Math.PI * 2)
-            ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`
-            ctx.fill()
-          })
-        })
-      }
 
       // ── 3. Update SVG connection web ──
       if (svgRef.current && !isMobileRef.current) {
@@ -366,7 +300,7 @@ export function RadialOrbitalTimeline({
       cancelAnimationFrame(animRef.current)
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [orbits, colors, computePosition, timelineData])
+  }, [colors, computePosition, timelineData])
 
   // ─── CLICK HANDLERS ───────────────────────────────────
   const handleItemClick = useCallback(
@@ -486,10 +420,12 @@ export function RadialOrbitalTimeline({
             style={{ animation: "orbital-breathe 4s ease-in-out infinite" }}
           />
 
-          {/* Core */}
+          {/* Core + K.O.A acronym */}
           <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-white/20 via-white/10 to-white/5 border border-white/15 flex items-center justify-center backdrop-blur-sm">
             <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-white/80 animate-ping opacity-20" />
-            <div className="absolute w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
+            <span className="absolute text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/90">
+              K.O.A
+            </span>
           </div>
         </div>
       </div>
@@ -508,7 +444,7 @@ export function RadialOrbitalTimeline({
             key={item.id}
             ref={(el) => { nodeRefs.current[index] = el }}
             className="absolute top-1/2 left-1/2 will-change-transform"
-            style={{ marginLeft: "-28px", marginTop: "-28px" }}
+            style={{ marginLeft: "-32px", marginTop: "-32px" }}
           >
             <button
               onClick={() => handleItemClick(item)}
@@ -538,7 +474,7 @@ export function RadialOrbitalTimeline({
               {/* Node circle */}
               <div
                 className={cn(
-                  "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 relative transition-all duration-300",
+                  "w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center border-2 relative transition-all duration-300",
                   isHovered && !isActive && "scale-[1.15]",
                   isActive && "scale-110"
                 )}
@@ -576,7 +512,7 @@ export function RadialOrbitalTimeline({
                   }
                 >
                   <Icon
-                    size={20}
+                    size={22}
                     className={cn(
                       "transition-all duration-300",
                       isActive

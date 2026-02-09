@@ -204,7 +204,7 @@ function useScrollAnimations() {
 
     return () => {
       document.documentElement.style.scrollBehavior = ""
-      ScrollTrigger.getAll().forEach((t) => t.kill())
+      ScrollTrigger.getAll().forEach((t: { kill: () => void }) => t.kill())
     }
   }, [])
 }
