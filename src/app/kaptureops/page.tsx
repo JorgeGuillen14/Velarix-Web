@@ -153,31 +153,31 @@ export default function KaptureOpsPage() {
       <ShaderBackground />
       <SiteHeader activePage="kaptureops" />
 
-      <div className="relative z-10 pt-20">
-        {/* 1) PRODUCT HERO */}
-        <section className="gsap-k-hero relative w-full px-6 md:px-12 lg:px-20 pt-16 md:pt-28 pb-16 md:pb-24" style={brandFont}>
+      <div className="relative z-10 pt-20" style={brandFont}>
+        {/* 1) PRODUCT HERO — same structure & typography as home */}
+        <section className="gsap-k-hero relative w-full px-6 md:px-12 lg:px-20 pt-14 md:pt-24 pb-14 md:pb-20">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
-          <div className="max-w-4xl relative">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-neutral-500 mb-6 font-medium">
+          <div className="max-w-4xl mx-auto relative">
+            <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-4 font-medium">
               A Velarix Product
             </p>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-[-0.03em] text-white leading-[1.05] mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-[-0.03em] text-white leading-[1.05] mb-5">
               KaptureOps AI
             </h1>
-            <p className="text-xl md:text-2xl font-medium text-neutral-300 tracking-[-0.01em] mb-8 max-w-2xl">
+            <p className="text-[16px] md:text-lg leading-[1.7] text-neutral-400 mb-6 max-w-2xl">
               The all-in-one, AI-driven operating system for defense contractors.
             </p>
-            <p className="text-[16px] leading-[1.7] text-neutral-400 max-w-2xl mb-10">
+            <p className="text-[16px] leading-[1.7] text-neutral-400 max-w-2xl mb-8">
               KaptureOps AI replaces fragmented tools with a single platform that automates the complete capture-to-contract lifecycle. Opportunity discovery, proposal generation, resume-based team building, compliance tracking, financial management, and contract oversight — one system that acts as both your operational backbone and strategic advisor.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
               <Link href="/request-demo">
-                <MagneticButton className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
+                <MagneticButton className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </MagneticButton>
               </Link>
               <a href="#capabilities">
-                <MagneticButton className="px-8 py-3.5 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
+                <MagneticButton className="px-8 py-3 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
                   See Platform Capabilities
                 </MagneticButton>
               </a>
@@ -188,53 +188,58 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
-        {/* 2) PRODUCT OVERVIEW BAND */}
-        <section className="gsap-k-overview relative w-full px-6 md:px-12 lg:px-20 py-16 md:py-24" style={brandFont}>
+        {/* 2) PRODUCT OVERVIEW — same section pattern & typography as home */}
+        <section className="gsap-k-overview relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
-          <div className="max-w-6xl mx-auto relative">
-            <h2 className="gsap-k-section-heading text-2xl md:text-3xl font-bold tracking-[-0.02em] text-white mb-12 text-center">
-              Platform Overview
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-              <div className="gsap-k-overview-col text-center">
-                <h3 className="text-lg font-semibold text-white mb-3 tracking-[-0.01em]">Find &amp; Win</h3>
-                <p className="text-[15px] leading-relaxed text-neutral-400 mb-4">
+          <div className="max-w-6xl mx-auto relative text-center">
+            <div className="gsap-k-section-heading mb-10">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
+                Product Overview
+              </p>
+              <h2 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] text-white">
+                Platform Overview
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
+              <div className="gsap-k-overview-col w-full max-w-md text-center">
+                <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">Find &amp; Win</h3>
+                <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
                   AI-powered opportunity scoring, automated proposal generation, and intelligent team building — all in one workflow.
                 </p>
                 <ul className="space-y-2 text-left mx-auto max-w-xs">
-                  <li className="text-sm text-neutral-500 flex items-baseline gap-2">
-                    <span className="inline-block w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0 mt-1.5" />Pursue only what you can win
+                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Pursue only what you can win
                   </li>
-                  <li className="text-sm text-neutral-500 flex items-baseline gap-2">
-                    <span className="inline-block w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0 mt-1.5" />Proposals drafted in minutes, not weeks
+                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Proposals drafted in minutes, not weeks
                   </li>
                 </ul>
               </div>
-              <div className="gsap-k-overview-col text-center">
-                <h3 className="text-lg font-semibold text-white mb-3 tracking-[-0.01em]">People &amp; Partners</h3>
-                <p className="text-[15px] leading-relaxed text-neutral-400 mb-4">
+              <div className="gsap-k-overview-col w-full max-w-md text-center">
+                <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">People &amp; Partners</h3>
+                <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
                   Upload every resume in your organization. AI matches the best personnel and teaming partners to each pursuit automatically.
                 </p>
                 <ul className="space-y-2 text-left mx-auto max-w-xs">
-                  <li className="text-sm text-neutral-500 flex items-baseline gap-2">
-                    <span className="inline-block w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0 mt-1.5" />Always field your strongest team
+                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Always field your strongest team
                   </li>
-                  <li className="text-sm text-neutral-500 flex items-baseline gap-2">
-                    <span className="inline-block w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0 mt-1.5" />Gap analysis across every pursuit
+                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Gap analysis across every pursuit
                   </li>
                 </ul>
               </div>
-              <div className="gsap-k-overview-col text-center">
-                <h3 className="text-lg font-semibold text-white mb-3 tracking-[-0.01em]">Operate &amp; Grow</h3>
-                <p className="text-[15px] leading-relaxed text-neutral-400 mb-4">
+              <div className="gsap-k-overview-col w-full max-w-md text-center">
+                <h3 className="text-xl font-semibold tracking-[-0.02em] text-white mb-3 md:text-[1.25rem]">Operate &amp; Grow</h3>
+                <p className="text-sm md:text-base leading-[1.375rem] text-neutral-400 mb-4">
                   Compliance tracking, financial management, invoice automation, and contract oversight — continuously and automatically.
                 </p>
                 <ul className="space-y-2 text-left mx-auto max-w-xs">
-                  <li className="text-sm text-neutral-500 flex items-baseline gap-2">
-                    <span className="inline-block w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0 mt-1.5" />Always audit-ready, never scrambling
+                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Always audit-ready, never scrambling
                   </li>
-                  <li className="text-sm text-neutral-500 flex items-baseline gap-2">
-                    <span className="inline-block w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0 mt-1.5" />Full visibility from award to closeout
+                  <li className="flex items-start gap-2.5 text-[13px] text-neutral-500 leading-[1.5]">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 mt-1.5 shrink-0" />Full visibility from award to closeout
                   </li>
                 </ul>
               </div>
@@ -242,18 +247,18 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
-        {/* 3) RADIAL ORBITAL TIMELINE — Platform Capabilities */}
-        <section id="capabilities" className="gsap-k-capabilities relative w-full px-6 md:px-12 lg:px-20 py-16 md:py-24" style={brandFont}>
+        {/* 3) PLATFORM CAPABILITIES — orbital timeline */}
+        <section id="capabilities" className="gsap-k-capabilities relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
-          <div className="max-w-6xl mx-auto relative">
-            <div className="gsap-k-section-heading mb-4 text-center">
-              <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-3 font-medium">
+          <div className="max-w-6xl mx-auto relative text-center">
+            <div className="gsap-k-section-heading mb-8">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
                 9 Core Modules
               </p>
               <h2 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] text-white">
                 Platform Capabilities
               </h2>
-              <p className="text-sm text-neutral-500 mt-3 max-w-lg mx-auto">
+              <p className="text-[16px] leading-[1.7] text-neutral-400 mt-3 max-w-lg mx-auto">
                 Click any module to explore. Connected modules pulse to show how KaptureOps links your entire workflow.
               </p>
             </div>
@@ -263,20 +268,25 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
-        {/* 4) HOW IT WORKS */}
-        <section className="gsap-k-how relative w-full px-6 md:px-12 lg:px-20 py-16 md:py-24" style={brandFont}>
+        {/* 4) HOW IT WORKS — same section pattern as home */}
+        <section className="gsap-k-how relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-4xl mx-auto relative">
-            <h2 className="gsap-k-section-heading text-2xl md:text-3xl font-bold tracking-[-0.02em] text-white mb-12 text-center">
-              How It Works
-            </h2>
+            <div className="gsap-k-section-heading mb-12 text-center">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
+                Process
+              </p>
+              <h2 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] text-white">
+                How It Works
+              </h2>
+            </div>
             <div className="space-y-0">
               {steps.map((step) => (
                 <div key={step.num} className="gsap-k-step flex items-start gap-6 md:gap-8 py-6 border-t border-white/[0.06]">
-                  <span className="text-[13px] font-mono text-neutral-600 pt-0.5 flex-shrink-0">{step.num}</span>
+                  <span className="text-[13px] font-mono text-neutral-500 pt-0.5 flex-shrink-0">{step.num}</span>
                   <div>
                     <h3 className="text-base md:text-lg font-semibold text-white mb-1 tracking-[-0.01em]">{step.label}</h3>
-                    <p className="text-sm text-neutral-500 leading-relaxed">{step.desc}</p>
+                    <p className="text-[15px] leading-[1.6] text-neutral-400">{step.desc}</p>
                   </div>
                 </div>
               ))}
@@ -284,41 +294,51 @@ export default function KaptureOpsPage() {
           </div>
         </section>
 
-        {/* 5) RESULTS */}
-        <section className="gsap-k-results relative w-full px-6 md:px-12 lg:px-20 py-16 md:py-24" style={brandFont}>
+        {/* 5) OUTCOMES — same section pattern as home */}
+        <section className="gsap-k-results relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
-          <div className="max-w-6xl mx-auto relative">
-            <h2 className="gsap-k-section-heading text-2xl md:text-3xl font-bold tracking-[-0.02em] text-white mb-12 text-center">
-              Outcomes
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-8 text-center">
-                <p className="text-3xl md:text-4xl font-bold text-white mb-3 tracking-[-0.03em]">Win more</p>
-                <p className="text-[15px] text-neutral-400 leading-relaxed">Stronger proposals with AI-scored team composition and past performance matching.</p>
+          <div className="max-w-6xl mx-auto relative text-center">
+            <div className="gsap-k-section-heading mb-10">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
+                Results
+              </p>
+              <h2 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] text-white">
+                Outcomes
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-6 md:p-8 text-center">
+                <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">Win more</p>
+                <p className="text-[15px] leading-[1.6] text-neutral-400">Stronger proposals with AI-scored team composition and past performance matching.</p>
               </div>
-              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-8 text-center">
-                <p className="text-3xl md:text-4xl font-bold text-white mb-3 tracking-[-0.03em]">Spend less</p>
-                <p className="text-[15px] text-neutral-400 leading-relaxed">Replace 6-8 tools and cut $50K+ per proposal in labor. AI drafts in minutes.</p>
+              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-6 md:p-8 text-center">
+                <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">Spend less</p>
+                <p className="text-[15px] leading-[1.6] text-neutral-400">Replace 6-8 tools and cut $50K+ per proposal in labor. AI drafts in minutes.</p>
               </div>
-              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-8 text-center">
-                <p className="text-3xl md:text-4xl font-bold text-white mb-3 tracking-[-0.03em]">Stay ready</p>
-                <p className="text-[15px] text-neutral-400 leading-relaxed">Always CMMC-compliant, always DCAA audit-ready, always on top of contract milestones.</p>
+              <div className="gsap-k-result rounded-2xl border border-white/[0.08] bg-black/50 p-6 md:p-8 text-center">
+                <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-[-0.03em]">Stay ready</p>
+                <p className="text-[15px] leading-[1.6] text-neutral-400">Always CMMC-compliant, always DCAA audit-ready, always on top of contract milestones.</p>
               </div>
             </div>
-            <p className="mt-8 text-[12px] text-neutral-600 text-center">
+            <p className="mt-8 text-[12px] text-neutral-600 text-center max-w-xl mx-auto">
               Results vary by process maturity and data quality.
             </p>
           </div>
         </section>
 
-        {/* 6) SECURITY */}
-        <section id="security" className="gsap-k-security relative w-full px-6 md:px-12 lg:px-20 py-16 md:py-24" style={brandFont}>
+        {/* 6) SECURITY & GOVERNANCE — same bullets & typography as home */}
+        <section id="security" className="gsap-k-security relative w-full px-6 md:px-12 lg:px-20 pt-10 pb-12 md:pt-14 md:pb-16">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-3xl mx-auto relative text-center">
-            <h2 className="gsap-k-section-heading text-2xl md:text-3xl font-bold tracking-[-0.02em] text-white mb-10">
-              Security &amp; Governance
-            </h2>
-            <ul className="space-y-4 text-left max-w-lg mx-auto">
+            <div className="gsap-k-section-heading mb-10">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-medium">
+                Trust &amp; Compliance
+              </p>
+              <h2 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] text-white">
+                Security &amp; Governance
+              </h2>
+            </div>
+            <ul className="space-y-3 text-left max-w-lg mx-auto">
               {[
                 "Hosted on AWS GovCloud",
                 "Encryption at rest and in transit",
@@ -328,36 +348,36 @@ export default function KaptureOpsPage() {
                 "Designed to align with CMMC Level 2 practices",
                 "DCAA-compliant financial documentation",
               ].map((item) => (
-                <li key={item} className="flex items-baseline gap-3 text-[15px] text-neutral-400">
+                <li key={item} className="flex items-start gap-2.5 text-[15px] text-neutral-400 leading-[1.5]">
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/20 flex-shrink-0 mt-1.5" />
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="mt-8 text-[12px] text-neutral-600">
+            <p className="mt-8 text-[12px] text-neutral-600 max-w-lg mx-auto">
               No certification claims are made. Architecture is designed with alignment in mind.
             </p>
           </div>
         </section>
 
-        {/* 7) FINAL CTA */}
-        <section className="gsap-k-final-cta relative w-full px-6 md:px-12 lg:px-20 py-20 md:py-28" style={brandFont}>
+        {/* 7) FINAL CTA — same as home CTA style */}
+        <section className="gsap-k-final-cta relative w-full px-6 md:px-12 lg:px-20 pt-14 pb-16 md:pt-20 md:pb-24">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
           <div className="max-w-3xl mx-auto relative text-center">
             <h2 className="text-3xl md:text-5xl font-bold tracking-[-0.03em] text-white leading-[1.1] mb-4">
               Stop losing contracts to disorganization.
             </h2>
-            <p className="text-[16px] leading-[1.7] text-neutral-400 max-w-2xl mx-auto mb-10">
+            <p className="text-[16px] leading-[1.7] text-neutral-400 max-w-2xl mx-auto mb-8">
               Your past performance is buried in SharePoint. Your team capabilities live in people&apos;s heads. Your compliance status is a spreadsheet someone forgot to update. KaptureOps AI fixes all of it.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/request-demo">
-                <MagneticButton className="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
+                <MagneticButton className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-colors flex items-center gap-2 tracking-wide uppercase">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </MagneticButton>
               </Link>
               <a href="mailto:contact@velarix.com">
-                <MagneticButton className="px-8 py-3.5 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
+                <MagneticButton className="px-8 py-3 rounded-full border border-neutral-700 text-white font-medium text-sm hover:bg-white/5 transition-colors tracking-wide uppercase">
                   Contact Velarix
                 </MagneticButton>
               </a>
