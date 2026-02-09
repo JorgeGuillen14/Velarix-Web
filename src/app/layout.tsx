@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Space_Grotesk } from "next/font/google";
-import { CustomCursor } from "@/components/ui/custom-cursor";
 import "./globals.css";
+
+const CustomCursor = dynamic(
+  () => import("@/components/ui/custom-cursor").then((m) => ({ default: m.CustomCursor })),
+  { ssr: false }
+);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
