@@ -206,7 +206,7 @@ export default function RequestDemoPage() {
           landing_page: typeof window !== "undefined" ? window.location.href : null,
         },
       }
-      const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/app"
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? ""
       const res = await fetch(`${basePath}/api/leads/request-demo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
